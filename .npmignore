@@ -1,0 +1,15 @@
+*.bat
+.htaccess
+
+xeno/**
+scripts/coffee/pg/**
+node_modules
+
+-p
+
+pg/**
+
+npm-debug.log
+!*.gitkeep
+
+pg-html/**

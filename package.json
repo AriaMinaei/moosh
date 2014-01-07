@@ -1,0 +1,19 @@
+{
+  "name": "moosh",
+  "version": "0.1.0-beta1",
+  "description": "(work in progress)",
+  "main": "scripts/js/lib/Moosh.js",
+  "dependencies": {
+    "utila": "0.3.0-beta1"
+  },
+  "devDependencies": {
+    "coffee-script": "~1.6.3"
+  },
+  "scripts": {
+    "test": "node ./node_modules/coffee-script/bin/cake test",
+    "prepublish": "node ./node_modules/coffee-script/bin/cake build"
+  },
+  "author": "Aria Minaei",
+  "license": "MIT",
+  "repository": "https://github.com/AriaMinaei/moosh.git"
+}
