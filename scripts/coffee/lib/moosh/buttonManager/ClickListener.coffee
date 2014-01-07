@@ -2,7 +2,7 @@ _Listener = require '../_Listener'
 
 module.exports = class ClickListener extends _Listener
 
-	constructor: (@_manager, @_nodeData) ->
+	constructor: (@_manager, @_nodeData, args) ->
 
 		@_downCallback = null
 		@_upCallback = null
@@ -16,6 +16,10 @@ module.exports = class ClickListener extends _Listener
 		@_lastRepeatCheckTimeout = null
 
 		super
+
+		if args[0] instanceof Function
+
+			@onDone args[0]
 
 	onDown: (cb) ->
 

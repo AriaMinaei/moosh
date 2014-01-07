@@ -9,9 +9,9 @@ module.exports = class HoverManager
 
 		@_activeListeners = []
 
-	onHover: (nodeData) ->
+	onHover: (nodeData, args) ->
 
-		l = new HoverListener @, nodeData
+		l = new HoverListener @, nodeData, args
 
 		nodeData.hoverListeners.push l
 

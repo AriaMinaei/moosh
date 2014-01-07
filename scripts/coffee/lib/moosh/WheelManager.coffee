@@ -7,9 +7,9 @@ module.exports = class WheelManager
 
 		@_keys = @clickManager._keys
 
-	onWheel: (nodeData) ->
+	onWheel: (nodeData, args) ->
 
-		l = new WheelListener @, nodeData
+		l = new WheelListener @, nodeData, args
 
 		nodeData.wheelListeners.push l
 

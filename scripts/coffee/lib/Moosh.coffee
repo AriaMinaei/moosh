@@ -200,7 +200,7 @@ module.exports = class Moosh
 
 		@_wheels.handleMouseWheel e, ancestors
 
-	_getDataForListener: (node) ->
+	_getNodeDataForListener: (node) ->
 
 		node = @_getHtmlNode node
 
@@ -208,50 +208,58 @@ module.exports = class Moosh
 
 		data = @_nodesData[id]
 
-	onHover: (node) ->
+	onClickOutside: (node, cb) ->
 
-		data = @_getDataForListener node
+		data = @_getNodeDataForListener node
 
-		@_hovers.onHover data
 
-	onWheel: (node) ->
+	onHover: (node, rest...) ->
 
-		data = @_getDataForListener node
+		data = @_getNodeDataForListener node
 
-		@_wheels.onWheel data
+		@_hovers.onHover data, rest
 
-	onLeftClick: (node) ->
+	onWheel: (node, rest...) ->
 
-		data = @_getDataForListener node
+		data = @_getNodeDataForListener node
 
-		@_lefts.onClick data
+		@_wheels.onWheel data, rest
 
-	onRightClick: (node) ->
+	onLeftClick: (node, rest...) ->
 
-		data = @_getDataForListener node
+		data = @_getNodeDataForListener node
 
-		@_right.onClick data
+		@_lefts.onClick data, rest
 
-	onMiddleClick: (node) ->
+	onRightClick: (node, rest...) ->
 
-		data = @_getDataForListener node
+		data = @_getNodeDataForListener node
 
-		@_middles.onClick data
+		@_right.onClick data, rest
 
-	onLeftDrag: (node) ->
+	onMiddleClick: (node, rest...) ->
 
-		data = @_getDataForListener node
+		data = @_getNodeDataForListener node
 
-		@_lefts.onDrag data
+		@_middles.onClick data, rest
 
-	onRightDrag: (node) ->
+	onLeftDrag: (node, rest...) ->
 
-		data = @_getDataForListener node
+		data = @_getNodeDataForListener node
 
-		@_right.onDrag data
+		@_lefts.onDrag data, rest
 
-	onMiddleDrag: (node) ->
+	onRightDrag: (node, rest...) ->
 
-		data = @_getDataForListener node
+		data = @_getNodeDataForListener node
 
-		@_middles.onDrag data
+		@_right.onDrag data, rest
+
+	onMiddleDrag: (node, rest...) ->
+
+		data = @_getNodeDataForListener node
+
+		@_middles.onDrag data, rest
+
+Moosh::onDrag = Moosh::onLeftDrag
+Moosh::onClick = Moosh::onLeftClick

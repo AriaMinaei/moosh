@@ -20,8 +20,6 @@ module.exports = class _Listener
 
 		@_event =
 
-			keys: @_keys.activeKeys()
-
 			pageX: 0
 			pageY: 0
 
@@ -39,7 +37,7 @@ module.exports = class _Listener
 
 		e = @_lastReceivedMouseEvent
 
-		@_event.keys = @_keys.activeKeys()
+		# @_event.keys = @_keys.activeKeys()
 
 		@_event.screenX = e.screenX
 		@_event.screenY = e.screenY
@@ -81,23 +79,27 @@ module.exports = class _Listener
 
 			throw Error "Bad combo '#{combo}'"
 
-		@_keyBinding = @_keys.on combo
+		@_keyBinding = @_keys.register_combo
 
-		@_keyBinding.on 'keydown', =>
+			keys: combo
 
-			return if @_comboSatisfies
+			on_keydown: =>
 
-			@_comboSatisfies = yes
+				return if @_comboSatisfies
 
-			do @_startCombo
+				@_comboSatisfies = yes
 
-		@_keyBinding.on 'keyup', =>
+				do @_startCombo
 
-			return unless @_comboSatisfies
+			on_keyup: =>
 
-			@_comboSatisfies = no
+				return unless @_comboSatisfies
 
-			do @_endCombo
+				@_comboSatisfies = no
+
+				do @_endCombo
+
+			prevent_repeat: yes
 
 		@
 

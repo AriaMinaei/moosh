@@ -80,17 +80,17 @@ module.exports = class ButtonManager
 
 		return
 
-	onClick: (nodeData) ->
+	onClick: (nodeData, args) ->
 
-		l = new ClickListener @, nodeData
+		l = new ClickListener @, nodeData, args
 
 		nodeData[@keyName].clickListeners.push l
 
 		l
 
-	onDrag: (nodeData) ->
+	onDrag: (nodeData, args) ->
 
-		l = new DragListener @, nodeData
+		l = new DragListener @, nodeData, args
 
 		nodeData[@keyName].dragListeners.push l
 
