@@ -33,6 +33,8 @@ module.exports = class _Listener
 
 			preventDefault: => @_lastReceivedMouseEvent.preventDefault()
 
+			originalEvent: null
+
 	_modifyEvent: ->
 
 		e = @_lastReceivedMouseEvent
@@ -57,7 +59,41 @@ module.exports = class _Listener
 		@_event.fractionX = @_event.layerX / rect.width
 		@_event.fractionY = @_event.layerY / rect.height
 
+		@_event.originalEvent = e
+
 		return
+
+	withNoKeys: ->
+
+		if @_locked
+
+			throw Error "You can only set key combos on the same tick this listener was created"
+
+		if @_hasCombo
+
+			throw Error "Keyboard combo is already set on this event listener"
+
+		@_comboSatisfies = no
+
+		@_hasCombo = yes
+
+		@_keyBinding = @_keys.noKeys =>
+
+			return if @_comboSatisfies
+
+			@_comboSatisfies = yes
+
+			do @_startCombo
+
+		, =>
+
+			return unless @_comboSatisfies
+
+			@_comboSatisfies = no
+
+			do @_endCombo
+
+		@
 
 	withKeys: (combo) ->
 

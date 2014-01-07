@@ -135,7 +135,7 @@ module.exports = class Moosh
 
 			if id?
 
-				ancestors.unshift @_nodesData[id]
+				ancestors.push @_nodesData[id]
 
 			break if node is @rootNode
 
