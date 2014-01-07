@@ -8,7 +8,7 @@ module.exports = class Moosh
 
 	@_instanceCounter = 0
 
-	constructor: (@rootNode = document.body) ->
+	constructor: (@rootNode = document.body, @_keys) ->
 
 		if @rootNode.node? then @rootNode = @rootNode.node
 

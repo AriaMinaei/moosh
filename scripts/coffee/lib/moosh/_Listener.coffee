@@ -1,8 +1,8 @@
-Keys = require 'keyboardjs'
-
 module.exports = class _Listener
 
-	constructor: ->
+	constructor: (manager) ->
+
+		@_keys = manager._keys
 
 		@_locked = no
 
@@ -20,7 +20,7 @@ module.exports = class _Listener
 
 		@_event =
 
-			keys: Keys.activeKeys()
+			keys: @_keys.activeKeys()
 
 			pageX: 0
 			pageY: 0
@@ -39,7 +39,7 @@ module.exports = class _Listener
 
 		e = @_lastReceivedMouseEvent
 
-		@_event.keys = Keys.activeKeys()
+		@_event.keys = @_keys.activeKeys()
 
 		@_event.screenX = e.screenX
 		@_event.screenY = e.screenY
@@ -81,7 +81,7 @@ module.exports = class _Listener
 
 			throw Error "Bad combo '#{combo}'"
 
-		@_keyBinding = Keys.on combo
+		@_keyBinding = @_keys.on combo
 
 		@_keyBinding.on 'keydown', =>
 

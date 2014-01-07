@@ -5,6 +5,8 @@ module.exports = class HoverManager
 
 	constructor: (@clickManager) ->
 
+		@_keys = @clickManager._keys
+
 		@_activeListeners = []
 
 	onHover: (nodeData) ->

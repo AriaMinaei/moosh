@@ -1,4 +1,3 @@
-Keys = require 'keyboardjs'
 _Listener = require '../_Listener'
 
 module.exports = class WheelListener extends _Listener

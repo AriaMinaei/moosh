@@ -11,7 +11,7 @@ module.exports = class ClickListener extends _Listener
 
 		@_active = no
 
-		n = 1
+		@_repeats = 1
 
 		@_lastRepeatCheckTimeout = null
 
