@@ -1,6 +1,7 @@
 HoverManager = require './moosh/HoverManager'
 WheelManager = require './moosh/WheelManager'
 ButtonManager = require './moosh/ButtonManager'
+array = require 'utila/scripts/js/lib/array'
 
 module.exports = class Moosh
 
@@ -15,6 +16,8 @@ module.exports = class Moosh
 		@id = ++self._instanceCounter
 
 		@_nodesData = []
+
+		@_openModals = []
 
 		@_hovers = new HoverManager @
 
@@ -86,6 +89,8 @@ module.exports = class Moosh
 
 					clickListeners: []
 					dragListeners: []
+
+				callbacksForClickOutside: []
 
 		parseInt id
 
@@ -164,6 +169,8 @@ module.exports = class Moosh
 
 		if e.button is 0
 
+			@_closeModalsIfNecessary e, ancestors
+
 			@_lefts.handleMouseDown e, ancestors
 
 		else if e.button is 1
@@ -200,7 +207,7 @@ module.exports = class Moosh
 
 		@_wheels.handleMouseWheel e, ancestors
 
-	_getNodeDataForListener: (node) ->
+	_getNodeDataForListeners: (node) ->
 
 		node = @_getHtmlNode node
 
@@ -208,56 +215,85 @@ module.exports = class Moosh
 
 		data = @_nodesData[id]
 
+	_closeModalsIfNecessary: (e, ancestors) ->
+
+		i = 0
+
+		loop
+
+			nodeData = @_openModals[i]
+
+			return unless nodeData?
+
+			if ancestors.indexOf(nodeData) is -1
+
+				cb(e) for cb in nodeData.callbacksForClickOutside
+
+				array.pluck @_openModals, i
+
+			else
+
+				i++
+
+		return
+
 	onClickOutside: (node, cb) ->
 
-		data = @_getNodeDataForListener node
+		nodeData = @_getNodeDataForListeners node
 
+		if @_openModals.indexOf(nodeData) is -1
+
+			@_openModals.push nodeData
+
+		nodeData.callbacksForClickOutside.push cb
+
+		return
 
 	onHover: (node, rest...) ->
 
-		data = @_getNodeDataForListener node
+		data = @_getNodeDataForListeners node
 
 		@_hovers.onHover data, rest
 
 	onWheel: (node, rest...) ->
 
-		data = @_getNodeDataForListener node
+		data = @_getNodeDataForListeners node
 
 		@_wheels.onWheel data, rest
 
 	onLeftClick: (node, rest...) ->
 
-		data = @_getNodeDataForListener node
+		data = @_getNodeDataForListeners node
 
 		@_lefts.onClick data, rest
 
 	onRightClick: (node, rest...) ->
 
-		data = @_getNodeDataForListener node
+		data = @_getNodeDataForListeners node
 
 		@_right.onClick data, rest
 
 	onMiddleClick: (node, rest...) ->
 
-		data = @_getNodeDataForListener node
+		data = @_getNodeDataForListeners node
 
 		@_middles.onClick data, rest
 
 	onLeftDrag: (node, rest...) ->
 
-		data = @_getNodeDataForListener node
+		data = @_getNodeDataForListeners node
 
 		@_lefts.onDrag data, rest
 
 	onRightDrag: (node, rest...) ->
 
-		data = @_getNodeDataForListener node
+		data = @_getNodeDataForListeners node
 
 		@_right.onDrag data, rest
 
 	onMiddleDrag: (node, rest...) ->
 
-		data = @_getNodeDataForListener node
+		data = @_getNodeDataForListeners node
 
 		@_middles.onDrag data, rest
 
