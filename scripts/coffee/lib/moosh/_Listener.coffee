@@ -2,7 +2,7 @@ module.exports = class _Listener
 
 	constructor: (manager) ->
 
-		@_keys = manager._keys
+		@_kilidScope = manager._kilidScope
 
 		@_locked = no
 
@@ -35,11 +35,25 @@ module.exports = class _Listener
 
 			originalEvent: null
 
+	useKilidScope: (scope) ->
+
+		if @_locked
+
+			throw Error "You can only set key combos on the same tick this listener was created"
+
+		if @_hasCombo
+
+			throw Error "Keyboard combo is already set on this event listener"
+
+		@_kilidScope = scope
+
+		return
+
 	_modifyEvent: ->
 
 		e = @_lastReceivedMouseEvent
 
-		# @_event.keys = @_keys.activeKeys()
+		# @_event.keys = @_kilidScope.activeKeys()
 
 		@_event.screenX = e.screenX
 		@_event.screenY = e.screenY
@@ -77,7 +91,9 @@ module.exports = class _Listener
 
 		@_hasCombo = yes
 
-		@_keyBinding = @_keys.noKeys =>
+		@_keyBinding = @_kilidScope.on('')
+
+		.onStart =>
 
 			return if @_comboSatisfies
 
@@ -85,7 +101,7 @@ module.exports = class _Listener
 
 			do @_startCombo
 
-		, =>
+		.onEnd =>
 
 			return unless @_comboSatisfies
 
@@ -115,27 +131,23 @@ module.exports = class _Listener
 
 			throw Error "Bad combo '#{combo}'"
 
-		@_keyBinding = @_keys.register_combo
+		@_keyBinding = @_kilidScope.on(combo)
 
-			keys: combo
+		.onStart =>
 
-			on_keydown: =>
+			return if @_comboSatisfies
 
-				return if @_comboSatisfies
+			@_comboSatisfies = yes
 
-				@_comboSatisfies = yes
+			do @_startCombo
 
-				do @_startCombo
+		.onEnd =>
 
-			on_keyup: =>
+			return unless @_comboSatisfies
 
-				return unless @_comboSatisfies
+			@_comboSatisfies = no
 
-				@_comboSatisfies = no
-
-				do @_endCombo
-
-			prevent_repeat: yes
+			do @_endCombo
 
 		@
 

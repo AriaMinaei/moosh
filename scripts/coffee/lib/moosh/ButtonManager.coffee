@@ -6,7 +6,7 @@ module.exports = class ButtonManager
 
 	constructor: (@clickManager, @keyName, @keyCode) ->
 
-		@_keys = @clickManager._keys
+		@_kilidScope = @clickManager._kilidScope
 
 		@_activeListeners = []
 

@@ -5,7 +5,7 @@ module.exports = class WheelManager
 
 	constructor: (@clickManager) ->
 
-		@_keys = @clickManager._keys
+		@_kilidScope = @clickManager._kilidScope
 
 	onWheel: (nodeData, args) ->
 

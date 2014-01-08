@@ -9,7 +9,7 @@ module.exports = class Moosh
 
 	@_instanceCounter = 0
 
-	constructor: (@rootNode = document.body, @_keys) ->
+	constructor: (@rootNode = document.body, @_kilidScope) ->
 
 		if @rootNode.node? then @rootNode = @rootNode.node
 
@@ -18,6 +18,8 @@ module.exports = class Moosh
 		@_nodesData = []
 
 		@_openModals = []
+
+		@_nodesToIgnore = []
 
 		@_hovers = new HoverManager @
 
@@ -167,6 +169,10 @@ module.exports = class Moosh
 
 		ancestors = @_getNodeAncestors e.target
 
+		if ancestors[0] in @_nodesToIgnore
+
+			ancestors.shift()
+
 		if e.button is 0
 
 			@_closeModalsIfNecessary e, ancestors
@@ -296,6 +302,26 @@ module.exports = class Moosh
 		data = @_getNodeDataForListeners node
 
 		@_middles.onDrag data, rest
+
+	ignore: (node) ->
+
+		data = @_getNodeDataForListeners node
+
+		return if data in @_nodesToIgnore
+
+		@_nodesToIgnore.push data
+
+		@
+
+	unignore: (node) ->
+
+		data = @_getNodeDataForListeners node
+
+		return unless data in @_nodesToIgnore
+
+		array.pluckOneItem @_nodesToIgnore, data
+
+		@
 
 Moosh::onDrag = Moosh::onLeftDrag
 Moosh::onClick = Moosh::onLeftClick

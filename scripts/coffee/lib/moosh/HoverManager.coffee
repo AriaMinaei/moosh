@@ -5,7 +5,7 @@ module.exports = class HoverManager
 
 	constructor: (@clickManager) ->
 
-		@_keys = @clickManager._keys
+		@_kilidScope = @clickManager._kilidScope
 
 		@_activeListeners = []
 
