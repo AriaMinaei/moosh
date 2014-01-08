@@ -133,6 +133,8 @@ module.exports = class _Listener
 
 		@_keyBinding = @_kilidScope.on(combo)
 
+		.beExclusive()
+
 		.onStart =>
 
 			return if @_comboSatisfies
