@@ -243,6 +243,8 @@ module.exports = class Moosh
 
 				cb(e) for cb in nodeData.callbacksForClickOutside
 
+				nodeData.callbacksForClickOutside.length = 0
+
 				array.pluck @_openModals, i
 
 			else

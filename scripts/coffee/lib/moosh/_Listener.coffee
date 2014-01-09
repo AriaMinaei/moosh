@@ -53,8 +53,6 @@ module.exports = class _Listener
 
 		e = @_lastReceivedMouseEvent
 
-		# @_event.keys = @_kilidScope.activeKeys()
-
 		@_event.screenX = e.screenX
 		@_event.screenY = e.screenY
 
