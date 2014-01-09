@@ -45,7 +45,7 @@ module.exports = class ClickListener extends _Listener
 
 		return
 
-	repeat: (n) ->
+	repeatedBy: (n) ->
 
 		if @_locked
 
@@ -150,5 +150,13 @@ module.exports = class ClickListener extends _Listener
 				@_doneCallback @_event
 
 			clearTimeout @_lastRepeatCheckTimeout
+
+		return
+
+	_modifyEvent: ->
+
+		super
+
+		@_lastReceivedMouseEvent.preventDefault()
 
 		return
