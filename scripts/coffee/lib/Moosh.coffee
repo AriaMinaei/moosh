@@ -265,6 +265,18 @@ module.exports = class Moosh
 
 		return
 
+	discardClickOutside: (node) ->
+
+		nodeData = @_getNodeDataForListeners node
+
+		if @_openModals.indexOf(nodeData) isnt -1
+
+			array.pluckOneItem @_openModals, nodeData
+
+			nodeData.callbacksForClickOutside.length = 0
+
+		return
+
 	onHover: (node, rest...) ->
 
 		data = @_getNodeDataForListeners node
