@@ -160,3 +160,11 @@ module.exports = class ClickListener extends _Listener
 		@_lastReceivedMouseEvent.preventDefault()
 
 		return
+
+	detach: ->
+
+		do @_cancel
+
+		super
+
+		return

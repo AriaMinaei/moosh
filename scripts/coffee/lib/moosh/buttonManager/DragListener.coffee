@@ -74,7 +74,7 @@ module.exports = class DragListener extends _Listener
 
 			@_manager._removeListenerFromActiveListenersList @
 
-			if @_cancelCallback
+			if @_cancelCallback?
 
 				@_cancelCallback @_event
 
@@ -133,5 +133,13 @@ module.exports = class DragListener extends _Listener
 		if @_dragCallback?
 
 			@_dragCallback @_event
+
+		return
+
+	detach: ->
+
+		do @_cancel
+
+		super
 
 		return

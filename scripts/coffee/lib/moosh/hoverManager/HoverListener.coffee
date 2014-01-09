@@ -140,3 +140,13 @@ module.exports = class HoverListener extends _Listener
 		@_leaveCallback = cb
 
 		@
+
+	detach: ->
+
+		if @_mouseIsOverNode and @_comboSatisfies
+
+			do @_leave
+
+		super
+
+		return

@@ -156,3 +156,9 @@ module.exports = class _Listener
 	_startCombo: ->
 
 	_endCombo: ->
+
+	detach: ->
+
+		if @_keyBinding? then @_keyBinding.detach()
+
+		return

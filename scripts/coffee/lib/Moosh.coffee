@@ -105,15 +105,23 @@ module.exports = class Moosh
 		if id?
 
 			data = @_nodesData[id]
-			delete data.node
-			delete data.hoverListeners
-			delete data.wheelListeners
 
-			delete data.left
-			delete data.right
-			delete data.middle
+			l.detach() for l in data.hoverListeners
+
+			l.detach() for l in data.wheelListeners
+
+			l.detach() for l in data.left.clickListeners
+			l.detach() for l in data.left.dragListeners
+
+			l.detach() for l in data.right.clickListeners
+			l.detach() for l in data.right.dragListeners
+
+			l.detach() for l in data.middle.clickListeners
+			l.detach() for l in data.middle.dragListeners
 
 			node.removeAttribute "data-moosh-#{@id}-id"
+
+			@_nodesData[id] = null
 
 		@
 
