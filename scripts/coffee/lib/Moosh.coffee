@@ -53,9 +53,9 @@ module.exports = class Moosh
 
 		if node.node? then node = node.node
 
-		unless node instanceof HTMLElement
+		unless node instanceof Element
 
-			throw Error "node must either be a Foxie instance or an html element"
+			throw Error "node must either be a Foxie instance or an element"
 
 		node
 
