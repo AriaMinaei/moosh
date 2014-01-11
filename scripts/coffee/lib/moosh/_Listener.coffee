@@ -2,6 +2,8 @@ module.exports = class _Listener
 
 	constructor: (manager) ->
 
+		@_enabled = yes
+
 		@_kilidScope = manager._kilidScope
 
 		@_locked = no
@@ -34,6 +36,26 @@ module.exports = class _Listener
 			preventDefault: => @_lastReceivedMouseEvent.preventDefault()
 
 			originalEvent: null
+
+	enable: ->
+
+		if @_enabled
+
+			throw Error "This listener is already enabled"
+
+		@_enabled = yes
+
+		@
+
+	disable: ->
+
+		unless @_enabled
+
+			throw Error "This listener is already disabled"
+
+		@_enabled = no
+
+		@
 
 	useKilidScope: (scope) ->
 

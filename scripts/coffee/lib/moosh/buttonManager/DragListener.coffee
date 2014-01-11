@@ -82,6 +82,8 @@ module.exports = class DragListener extends _Listener
 
 	_handleMouseDown: (e) ->
 
+		return unless @_enabled
+
 		@_lastReceivedMouseEvent = e
 
 		return unless @_comboSatisfies
@@ -106,7 +108,7 @@ module.exports = class DragListener extends _Listener
 
 	_handleMouseUp: (e) ->
 
-		return unless @_mightBe
+		return unless @_mightBe and @_enabled
 
 		@_lastReceivedMouseEvent = e
 
@@ -124,7 +126,7 @@ module.exports = class DragListener extends _Listener
 
 	_handleMouseMove: (e) ->
 
-		return unless @_mightBe
+		return unless @_mightBe and @_enabled
 
 		@_lastReceivedMouseEvent = e
 
@@ -143,3 +145,11 @@ module.exports = class DragListener extends _Listener
 		super
 
 		return
+
+	disable: ->
+
+		super
+
+		do @_cancel
+
+		@

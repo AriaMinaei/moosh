@@ -62,6 +62,8 @@ module.exports = class HoverListener extends _Listener
 
 	_checkIfShouldLeave: (e, ancestors) ->
 
+		return unless @_enabled
+
 		@_lastReceivedMouseEvent = e
 
 		unless @_mouseIsOverNode
@@ -80,6 +82,8 @@ module.exports = class HoverListener extends _Listener
 		return
 
 	_handleMouseMove: (e) ->
+
+		return unless @_enabled
 
 		@_lastReceivedMouseEvent = e
 
@@ -150,3 +154,13 @@ module.exports = class HoverListener extends _Listener
 		super
 
 		return
+
+	disable: ->
+
+		super
+
+		if @_mouseIsOverNode and @_comboSatisfies
+
+			do @_leave
+
+		@

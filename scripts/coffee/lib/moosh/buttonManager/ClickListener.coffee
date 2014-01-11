@@ -67,6 +67,8 @@ module.exports = class ClickListener extends _Listener
 
 	_handleMouseMove: (e) ->
 
+		return unless @_enabled
+
 		unless @_active
 
 			throw Error "called _handleMouseMove when mighBe is off"
@@ -94,6 +96,8 @@ module.exports = class ClickListener extends _Listener
 		return
 
 	_handleMouseDown: (e) ->
+
+		return unless @_enabled
 
 		@_lastReceivedMouseEvent = e
 
@@ -127,7 +131,7 @@ module.exports = class ClickListener extends _Listener
 
 	_handleMouseUp: (e) ->
 
-		return unless @_active
+		return unless @_active and @_enabled
 
 		@_lastReceivedMouseEvent = e
 
@@ -168,3 +172,11 @@ module.exports = class ClickListener extends _Listener
 		super
 
 		return
+
+	disable: ->
+
+		super
+
+		do @_cancel
+
+		@
