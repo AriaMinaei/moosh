@@ -8,6 +8,16 @@ module.exports = class WheelListener extends _Listener
 
 		@_callback = null
 
+		@_preventDefault = yes
+
+	preventDefault: ->
+
+		@_preventDefault = yes
+
+	allowDefault: ->
+
+		@_preventDefault = no
+
 	onWheel: (cb) ->
 
 		@_callback = cb
@@ -31,6 +41,8 @@ module.exports = class WheelListener extends _Listener
 		@_lastReceivedMouseEvent = e
 
 		return unless @_comboSatisfies
+
+		e.preventDefault() if @_preventDefault
 
 		do @_modifyEvent
 

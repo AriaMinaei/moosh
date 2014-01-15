@@ -43,8 +43,6 @@ module.exports = class Moosh
 
 		@rootNode.addEventListener 'mousewheel', =>
 
-			event.preventDefault()
-
 			@_mousewheel event
 
 		, no
