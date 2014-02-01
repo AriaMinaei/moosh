@@ -29,21 +29,21 @@ module.exports = class Moosh
 		@_middles = new ButtonManager @, 'middle', 1
 		@_rights = new ButtonManager @, 'right', 2
 
-		@rootNode.addEventListener 'mousedown', =>
+		@rootNode.addEventListener 'mousedown', (e) =>
 
-			@_mousedown event
+			@_mousedown e
 
-		@rootNode.addEventListener 'mouseup', =>
+		@rootNode.addEventListener 'mouseup', (e) =>
 
-			@_mouseup event
+			@_mouseup e
 
-		@rootNode.addEventListener 'mousemove', =>
+		@rootNode.addEventListener 'mousemove', (e) =>
 
-			@_mousemove event
+			@_mousemove e
 
-		@rootNode.addEventListener 'mousewheel', =>
+		@rootNode.addEventListener 'mousewheel', (e) =>
 
-			@_mousewheel event
+			@_mousewheel e
 
 		, no
 
