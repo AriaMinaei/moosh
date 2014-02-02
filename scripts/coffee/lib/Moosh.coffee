@@ -156,18 +156,24 @@ module.exports = class Moosh
 		ancestors = @_getNodeAncestors e.target
 
 		@_hovers.handleMouseMove e, ancestors
+		@_lefts.handleMouseMove e, ancestors
+		@_rights.handleMouseMove e, ancestors
+		@_middles.handleMouseMove e, ancestors
 
-		if e.button is 0
 
-			@_lefts.handleMouseMove e, ancestors
+		# if e.button is 0
 
-		else if e.button is 1
+		# 	@_lefts.handleMouseMove e, ancestors
 
-			@_middles.handleMouseMove e, ancestors
+		# else if e.button is 1
 
-		else if e.button is 2
+		# 	@_middles.handleMouseMove e, ancestors
 
-			@_rights.handleMouseMove e, ancestors
+		# else if e.button is 2
+
+		# 	@_rights.handleMouseMove e, ancestors
+
+		# console.log 'move', e.button
 
 		return
 
