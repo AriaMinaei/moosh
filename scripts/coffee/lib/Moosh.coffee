@@ -29,19 +29,21 @@ module.exports = class Moosh
 		@_middles = new ButtonManager @, 'middle', 1
 		@_rights = new ButtonManager @, 'right', 2
 
-		@rootNode.addEventListener 'mousedown', (e) =>
+		body = document.body
+
+		body.addEventListener 'mousedown', (e) =>
 
 			@_mousedown e
 
-		@rootNode.addEventListener 'mouseup', (e) =>
+		body.addEventListener 'mouseup', (e) =>
 
 			@_mouseup e
 
-		@rootNode.addEventListener 'mousemove', (e) =>
+		body.addEventListener 'mousemove', (e) =>
 
 			@_mousemove e
 
-		@rootNode.addEventListener 'mousewheel', (e) =>
+		body.addEventListener 'mousewheel', (e) =>
 
 			@_mousewheel e
 
@@ -159,21 +161,6 @@ module.exports = class Moosh
 		@_lefts.handleMouseMove e, ancestors
 		@_rights.handleMouseMove e, ancestors
 		@_middles.handleMouseMove e, ancestors
-
-
-		# if e.button is 0
-
-		# 	@_lefts.handleMouseMove e, ancestors
-
-		# else if e.button is 1
-
-		# 	@_middles.handleMouseMove e, ancestors
-
-		# else if e.button is 2
-
-		# 	@_rights.handleMouseMove e, ancestors
-
-		# console.log 'move', e.button
 
 		return
 
