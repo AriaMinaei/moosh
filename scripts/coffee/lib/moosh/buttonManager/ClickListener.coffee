@@ -15,6 +15,9 @@ module.exports = class ClickListener extends _Listener
 
 		@_lastRepeatCheckTimeout = null
 
+		@_startPageX = 0
+		@_startPageY = 0
+
 		super
 
 		if args[0] instanceof Function
@@ -73,13 +76,13 @@ module.exports = class ClickListener extends _Listener
 
 		unless @_active
 
-			throw Error "called _handleMouseMove when mighBe is off"
+			throw Error "called _handleMouseMove when inactive"
 
-		if Math.abs(e.pageX - @_event.pageX) < 5
+		if Math.abs(Math.abs(e.pageX) - Math.abs(@_startPageX)) > 5 or
 
-			return
+		Math.abs(Math.abs(e.pageY) - Math.abs(@_startPageY)) > 5
 
-		do @_cancel
+			do @_cancel
 
 		return
 
@@ -110,6 +113,9 @@ module.exports = class ClickListener extends _Listener
 			@_active = yes
 
 			@_manager._addListenerToActiveListenersList @
+
+			@_startPageX = e.pageX
+			@_startPageY = e.pageY
 
 		do @_modifyEvent
 
