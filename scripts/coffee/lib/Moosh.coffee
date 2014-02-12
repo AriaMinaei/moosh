@@ -290,7 +290,7 @@ module.exports = class Moosh
 
 		data = @_getNodeDataForListeners node
 
-		@_right.onClick data, rest
+		@_rights.onClick data, rest
 
 	onMiddleClick: (node, rest...) ->
 
@@ -308,7 +308,7 @@ module.exports = class Moosh
 
 		data = @_getNodeDataForListeners node
 
-		@_right.onDrag data, rest
+		@_rights.onDrag data, rest
 
 	onMiddleDrag: (node, rest...) ->
 

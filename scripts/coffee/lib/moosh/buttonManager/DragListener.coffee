@@ -19,6 +19,8 @@ module.exports = class DragListener extends _Listener
 
 		super
 
+		@_event.cancel = => do @_cancel
+
 	_modifyEvent: ->
 
 		super

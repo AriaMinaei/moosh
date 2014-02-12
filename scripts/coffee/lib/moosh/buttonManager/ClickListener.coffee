@@ -21,6 +21,8 @@ module.exports = class ClickListener extends _Listener
 
 			@onDone args[0]
 
+		@_event.cancel = => do @_cancel
+
 	onDown: (cb) ->
 
 		@_downCallback = cb
