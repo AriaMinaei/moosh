@@ -57,6 +57,10 @@ module.exports = class _Listener
 
 		@
 
+	isEnabled: ->
+
+		@_enabled
+
 	useKilidScope: (scope) ->
 
 		if @_locked
