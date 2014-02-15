@@ -2,7 +2,7 @@ module.exports = class _Listener
 
 	constructor: (manager) ->
 
-		@_enabled = yes
+		@enabled = yes
 
 		@_kilidScope = manager._kilidScope
 
@@ -39,27 +39,23 @@ module.exports = class _Listener
 
 	enable: ->
 
-		if @_enabled
+		if @enabled
 
 			throw Error "This listener is already enabled"
 
-		@_enabled = yes
+		@enabled = yes
 
 		@
 
 	disable: ->
 
-		unless @_enabled
+		unless @enabled
 
 			throw Error "This listener is already disabled"
 
-		@_enabled = no
+		@enabled = no
 
 		@
-
-	isEnabled: ->
-
-		@_enabled
 
 	useKilidScope: (scope) ->
 

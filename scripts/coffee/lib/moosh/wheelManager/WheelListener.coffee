@@ -36,7 +36,7 @@ module.exports = class WheelListener extends _Listener
 
 	_handleMouseWheel: (e) ->
 
-		return unless @_enabled
+		return unless @enabled
 
 		@_lastReceivedMouseEvent = e
 

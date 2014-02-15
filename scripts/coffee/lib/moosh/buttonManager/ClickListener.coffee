@@ -72,7 +72,7 @@ module.exports = class ClickListener extends _Listener
 
 	_handleMouseMove: (e) ->
 
-		return unless @_enabled
+		return unless @enabled
 
 		unless @_active
 
@@ -102,7 +102,7 @@ module.exports = class ClickListener extends _Listener
 
 	_handleMouseDown: (e) ->
 
-		return unless @_enabled
+		return unless @enabled
 
 		@_lastReceivedMouseEvent = e
 
@@ -139,7 +139,7 @@ module.exports = class ClickListener extends _Listener
 
 	_handleMouseUp: (e) ->
 
-		return unless @_active and @_enabled
+		return unless @_active and @enabled
 
 		@_lastReceivedMouseEvent = e
 

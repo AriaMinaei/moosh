@@ -62,7 +62,7 @@ module.exports = class HoverListener extends _Listener
 
 	_checkIfShouldLeave: (e, ancestors) ->
 
-		return unless @_enabled
+		return unless @enabled
 
 		@_lastReceivedMouseEvent = e
 
@@ -83,7 +83,7 @@ module.exports = class HoverListener extends _Listener
 
 	_handleMouseMove: (e) ->
 
-		return unless @_enabled
+		return unless @enabled
 
 		@_lastReceivedMouseEvent = e
 
