@@ -72,9 +72,7 @@ module.exports = class DragListener extends _Listener
 
 		if @_mightBe
 
-			@_mightBe = no
-
-			@_manager._removeListenerFromActiveListenersList @
+			do @_end
 
 			if @_cancelCallback?
 
@@ -120,9 +118,7 @@ module.exports = class DragListener extends _Listener
 
 			@_upCallback @_event
 
-		@_manager._removeListenerFromActiveListenersList @
-
-		@_mightBe = no
+		do @_end
 
 		return
 
@@ -155,3 +151,11 @@ module.exports = class DragListener extends _Listener
 		do @_cancel
 
 		@
+
+	_end: ->
+
+		@_mightBe = no
+
+		@_manager._removeListenerFromActiveListenersList @
+
+		return

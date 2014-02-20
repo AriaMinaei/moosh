@@ -147,7 +147,7 @@ module.exports = class _Listener
 
 		combo = String combo
 
-		unless combo.match /^[a-zA-Z0-9\s\+]+$/
+		unless typeof combo is 'string'
 
 			throw Error "Bad combo '#{combo}'"
 
