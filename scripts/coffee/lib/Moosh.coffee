@@ -21,6 +21,8 @@ module.exports = class Moosh
 
 		@_nodesToIgnore = []
 
+		@current = {x: 0, y: 0}
+
 		@_hovers = new HoverManager @
 
 		@_wheels = new WheelManager @
@@ -154,6 +156,9 @@ module.exports = class Moosh
 		ancestors
 
 	_mousemove: (e) ->
+
+		@current.x = e.screenX
+		@current.y = e.screenY
 
 		ancestors = @_getNodeAncestors e.target
 
