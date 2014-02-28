@@ -153,6 +153,8 @@ module.exports = class ClickListener extends _Listener
 
 		if e.detail >= @_repeats
 
+			@_manager._cancelOthers @
+
 			@_manager._removeListenerFromActiveListenersList @
 
 			@_active = no

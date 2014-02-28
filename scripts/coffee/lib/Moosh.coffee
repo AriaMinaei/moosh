@@ -171,6 +171,8 @@ module.exports = class Moosh
 
 	_mousedown: (e) ->
 
+		# debugger
+
 		ancestors = @_getNodeAncestors e.target
 
 		if ancestors[0] in @_nodesToIgnore
