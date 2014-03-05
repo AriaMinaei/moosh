@@ -1,3 +1,5 @@
+array = require 'utila/scripts/js/lib/array'
+
 module.exports = class _Listener
 
 	constructor: (manager) ->
@@ -18,6 +20,8 @@ module.exports = class _Listener
 
 		@_hasCombo = no
 
+		@_comboType = 'Default'
+
 		@_comboSatisfies = yes
 
 		@_event =
@@ -36,6 +40,10 @@ module.exports = class _Listener
 			preventDefault: => @_lastReceivedMouseEvent.preventDefault()
 
 			originalEvent: null
+
+		@_active = no
+
+		@_activeStates = []
 
 	enable: ->
 
@@ -145,6 +153,8 @@ module.exports = class _Listener
 
 		@_hasCombo = yes
 
+		@_comboType = 'withKeys'
+
 		combo = String combo
 
 		unless typeof combo is 'string'
@@ -173,9 +183,106 @@ module.exports = class _Listener
 
 		@
 
+	startWith: (combo) ->
+
+		if @_locked
+
+			throw Error "You can only set key combos on the same tick this listener was created"
+
+		if @_hasCombo
+
+			throw Error "Keyboard combo is already set on this event listener"
+
+		@_comboSatisfies = no
+
+		@_hasCombo = yes
+
+		@_comboType = 'startWith'
+
+		combo = String combo
+
+		unless typeof combo is 'string'
+
+			throw Error "Bad combo '#{combo}'"
+
+		@_keyBinding = @_kilidScope.on(combo)
+
+		.beExclusive()
+
+		.onStart =>
+
+			return if @_comboSatisfies
+
+			@_comboSatisfies = yes
+
+			do @_startCombo
+
+		.onEnd =>
+
+			return unless @_comboSatisfies
+
+			@_comboSatisfies = no
+
+			do @_releaseCombo
+
+		@
+
+	defineState: (name, combo, exclusiveMode) ->
+
+		if @_locked
+
+			throw Error "You can only set key combos on the same tick this listener was created"
+
+		if @_comboType is 'startWith'
+
+			throw Error "Could not define state for 'startWith' type combo"
+
+
+		combo = String combo
+
+		unless typeof combo is 'string'
+
+			throw Error "Bad combo '#{combo}'"
+
+		@_keyBinding = @_kilidScope.on(combo)
+
+		if exclusiveMode
+
+			@_keyBinding.beExclusive()
+
+		else
+
+			@_keyBinding.beInclusive()
+
+		@_keyBinding
+
+		.onStart =>
+
+			if exclusiveMode
+
+				@_activeStates = []
+
+			@_activeStates.push name
+
+			return unless @_active
+
+			@_stateIs name
+
+		.onEnd =>
+
+			array.pluckOneItem @_activeStates, name
+
+			return unless @_active
+
+			do @_stateChanged
+
+		@
+
 	_startCombo: ->
 
 	_endCombo: ->
+
+	_releaseCombo: ->
 
 	detach: ->
 
