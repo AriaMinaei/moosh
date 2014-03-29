@@ -22,6 +22,29 @@ module.exports = class ButtonManager
 
 		return
 
+	_cancelOthers: (activeListener) ->
+
+		lastLength = @_activeListeners.length
+		i = 0
+
+		while lastLength > 0
+
+			listener = @_activeListeners[i]
+
+			return unless listener?
+
+			if activeListener isnt listener
+
+				do listener._cancel
+
+			newLength = @_activeListeners.length
+
+			i += newLength - lastLength + 1
+
+			lastLength = newLength
+
+		@_activeListeners = [activeListener]
+
 	handleMouseDown: (e, ancestors) ->
 
 		for nodeData in ancestors
@@ -33,8 +56,6 @@ module.exports = class ButtonManager
 			for listener in nodeData[@keyName].dragListeners
 
 				listener._handleMouseDown e
-
-			return if @_activeListeners.length > 0
 
 		return
 

@@ -6,8 +6,13 @@ module.exports = class DragListener extends _Listener
 
 		@_downCallback = null
 		@_upCallback = null
+		@_startCallback = null
+		@_endCallback = null
 		@_cancelCallback = null
 		@_dragCallback = null
+		@_releaseComboCallback = null
+		@_onStateCallback = null
+		@_onStateNameCallback = {}
 
 		@_startPageX = 0
 		@_startPageY = 0
@@ -50,6 +55,18 @@ module.exports = class DragListener extends _Listener
 
 		@
 
+	onStart: (cb) ->
+
+		@_startCallback = cb
+
+		@
+
+	onEnd: (cb) ->
+
+		@_endCallback = cb
+
+		@
+
 	onCancel: (cb) ->
 
 		@_cancelCallback = cb
@@ -62,9 +79,56 @@ module.exports = class DragListener extends _Listener
 
 		@
 
+	onReleaseCombo: (cb) ->
+
+		@_releaseComboCallback = cb
+
+		@
+
+	onState: ->
+
+		if arguments.length is 2
+
+			name = arguments[0]
+			cb = arguments[1]
+
+			if @_onStateNameCallback[name]?
+
+				throw Error "State \'#{name}\' is defined currently"
+
+			@_onStateNameCallback[name] = cb
+
+		if arguments.length is 1
+
+			cb = arguments[0]
+
+			@_onStateCallback = cb
+
+		@
+
+	_stateIs: (name) ->
+
+		do @_onStateNameCallback[name] if @_onStateNameCallback[name]?
+
+		do @_stateChanged
+
+	_stateChanged: ->
+
+		@_onStateCallback @_activeStates if @_onStateCallback?
+
 	_endCombo: ->
 
 		do @_cancel
+
+		return
+
+	_releaseCombo: ->
+
+		if @_mightBe
+
+			if @_releaseComboCallback?
+
+				@_releaseComboCallback @_event
 
 		return
 
@@ -89,6 +153,7 @@ module.exports = class DragListener extends _Listener
 		return unless @_comboSatisfies
 
 		@_mightBe = yes
+		@_firstTime = yes
 
 		@_manager._addListenerToActiveListenersList @
 
@@ -114,9 +179,19 @@ module.exports = class DragListener extends _Listener
 
 		do @_modifyEvent
 
-		if @_upCallback?
+		if @_firstTime
 
-			@_upCallback @_event
+			do @_cancel
+
+		else
+
+			if @_upCallback?
+
+				@_upCallback @_event
+
+			if @_doneCallback?
+
+				@_doneCallback @_event
 
 		do @_end
 
@@ -130,11 +205,30 @@ module.exports = class DragListener extends _Listener
 
 		do @_modifyEvent
 
+		if @_firstTime
+
+			@_firstTime = no
+
+			@_manager._cancelOthers @
+
+			if @_startCallback?
+
+				@_startCallback @_event
+
+			@_active = yes
+
+			do @_stateChanged
+
+			for name in @_activeStates
+
+				do @_onStateNameCallback[name] if @_onStateNameCallback[name]?
+
 		if @_dragCallback?
 
 			@_dragCallback @_event
 
 		return
+
 
 	detach: ->
 
@@ -155,6 +249,8 @@ module.exports = class DragListener extends _Listener
 	_end: ->
 
 		@_mightBe = no
+
+		@_active = no
 
 		@_manager._removeListenerFromActiveListenersList @
 

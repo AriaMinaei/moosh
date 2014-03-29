@@ -8,8 +8,7 @@ module.exports = class ClickListener extends _Listener
 		@_upCallback = null
 		@_cancelCallback = null
 		@_doneCallback = null
-
-		@_active = no
+		@_releaseComboCallback = null
 
 		@_repeats = 1
 
@@ -67,6 +66,28 @@ module.exports = class ClickListener extends _Listener
 	_endCombo: ->
 
 		do @_cancel
+
+		return
+
+	onReleaseCombo: (cb) ->
+
+		@_releaseComboCallback = cb
+
+		@
+
+	_endCombo: ->
+
+		do @_cancel
+
+		return
+
+	_releaseCombo: ->
+
+		return unless @_active and @enabled
+
+		if @_releaseComboCallback?
+
+			@_releaseComboCallback @_event
 
 		return
 
@@ -152,6 +173,8 @@ module.exports = class ClickListener extends _Listener
 			@_upCallback @_event
 
 		if e.detail >= @_repeats
+
+			@_manager._cancelOthers @
 
 			@_manager._removeListenerFromActiveListenersList @
 
