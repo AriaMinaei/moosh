@@ -51,6 +51,18 @@ module.exports = class Moosh
 
 		, no
 
+		body.addEventListener 'touchstart', (e) =>
+
+			@_touchstart e
+
+		body.addEventListener 'touchmove', (e) =>
+
+			@_touchmove e
+
+		body.addEventListener 'touchend', (e) =>
+
+			@_touchend e
+
 	_getHtmlNode: (node) ->
 
 		if node.node? then node = node.node
@@ -169,9 +181,21 @@ module.exports = class Moosh
 
 		return
 
-	_mousedown: (e) ->
+	_touchmove: (touchEvent) ->
 
-		# debugger
+		e = touchEvent.changedTouches[0]
+
+		# let's use these hacks until we come up with
+		# a better solution
+		e.preventDefault = touchEvent.preventDefault.bind(touchEvent)
+		e.button = 0
+		e.detail = 1
+
+		@_mousemove e
+
+		return
+
+	_mousedown: (e) ->
 
 		ancestors = @_getNodeAncestors e.target
 
@@ -195,6 +219,18 @@ module.exports = class Moosh
 
 		return
 
+	_touchstart: (touchEvent) ->
+
+		e = touchEvent.changedTouches[0]
+
+		e.preventDefault = touchEvent.preventDefault.bind(touchEvent)
+		e.button = 0
+		e.detail = 1
+
+		@_mousedown e
+
+		return
+
 	_mouseup: (e) ->
 
 		ancestors = @_getNodeAncestors e.target
@@ -210,6 +246,18 @@ module.exports = class Moosh
 		else if e.button is 2
 
 			@_rights.handleMouseUp e, ancestors
+
+		return
+
+	_touchend: (touchEvent) ->
+
+		e = touchEvent.changedTouches[0]
+
+		e.preventDefault = touchEvent.preventDefault.bind(touchEvent)
+		e.button = 0
+		e.detail = 1
+
+		@_mouseup e
 
 		return
 
