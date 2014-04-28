@@ -252,6 +252,10 @@ module.exports = class DragListener extends _Listener
 
 		@_active = no
 
+		if @_endCallback?
+
+			@_endCallback @_event
+
 		@_manager._removeListenerFromActiveListenersList @
 
 		return

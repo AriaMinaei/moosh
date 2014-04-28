@@ -23,7 +23,7 @@ module.exports = class Moosh
 
 		@current = {x: 0, y: 0}
 
-		@_touchScrollingDisabled = no
+		@_scrollingDisabled = no
 
 		@_hovers = new HoverManager @
 
@@ -185,7 +185,7 @@ module.exports = class Moosh
 
 	_touchmove: (touchEvent) ->
 
-		if @_touchScrollingDisabled
+		if @_scrollingDisabled
 
 			touchEvent.preventDefault()
 
@@ -268,6 +268,10 @@ module.exports = class Moosh
 		return
 
 	_mousewheel: (e) ->
+
+		if @_scrollingDisabled
+
+			e.preventDefault()
 
 		ancestors = @_getNodeAncestors e.target
 
@@ -397,13 +401,13 @@ module.exports = class Moosh
 
 		@
 
-	disableTouchScrolling: ->
+	disableScrolling: ->
 
-		@_touchScrollingDisabled = yes
+		@_scrollingDisabled = yes
 
-	enableTouchScrolling: ->
+	enableScrolling: ->
 
-		@_touchScrollingDisabled = no
+		@_scrollingDisabled = no
 
 Moosh::onDrag = Moosh::onLeftDrag
 Moosh::onClick = Moosh::onLeftClick
