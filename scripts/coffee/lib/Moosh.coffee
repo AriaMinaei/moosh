@@ -53,6 +53,18 @@ module.exports = class Moosh
 
 		, no
 
+		body.addEventListener 'wheel', (e) =>
+
+			@_mousewheel e
+
+		, no
+
+		body.addEventListener 'DOMMouseScroll', (e) =>
+
+			@_domMouseScroll e
+
+		, no
+
 		body.addEventListener 'touchstart', (e) =>
 
 			@_touchstart e
@@ -269,13 +281,15 @@ module.exports = class Moosh
 
 	_mousewheel: (e) ->
 
-		if @_scrollingDisabled
-
-			e.preventDefault()
+		e.preventDefault() if @_scrollingDisabled
 
 		ancestors = @_getNodeAncestors e.target
 
 		@_wheels.handleMouseWheel e, ancestors
+
+	_domMouseScroll: (e) ->
+
+		e.preventDefault() if @_scrollingDisabled
 
 	_getNodeDataForListeners: (node) ->
 
