@@ -229,6 +229,8 @@ module.exports = class Moosh
 
 		else if e.button is 1
 
+			e.preventDefault() if @_scrollingDisabled
+
 			@_middles.handleMouseDown e, ancestors
 
 		else if e.button is 2
