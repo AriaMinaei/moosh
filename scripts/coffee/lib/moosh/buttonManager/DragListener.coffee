@@ -8,6 +8,7 @@ module.exports = class DragListener extends _Listener
 		@_upCallback = null
 		@_startCallback = null
 		@_endCallback = null
+		@_stopCallback = null
 		@_cancelCallback = null
 		@_dragCallback = null
 		@_releaseComboCallback = null
@@ -58,6 +59,12 @@ module.exports = class DragListener extends _Listener
 	onStart: (cb) ->
 
 		@_startCallback = cb
+
+		@
+
+	onStop: (cb) ->
+
+		@_stopCallback = cb
 
 		@
 
@@ -169,6 +176,10 @@ module.exports = class DragListener extends _Listener
 
 			@_downCallback @_event
 
+		if @_startCallback?
+
+			@_startCallback @_event
+
 		return
 
 	_handleMouseUp: (e) ->
@@ -183,15 +194,17 @@ module.exports = class DragListener extends _Listener
 
 			do @_cancel
 
+			return
+
 		else
 
 			if @_upCallback?
 
 				@_upCallback @_event
 
-			if @_doneCallback?
+			if @_endCallback?
 
-				@_doneCallback @_event
+				@_endCallback @_event
 
 		do @_end
 
@@ -210,10 +223,6 @@ module.exports = class DragListener extends _Listener
 			@_firstTime = no
 
 			@_manager._cancelOthers @
-
-			if @_startCallback?
-
-				@_startCallback @_event
 
 			@_active = yes
 
@@ -247,6 +256,10 @@ module.exports = class DragListener extends _Listener
 		@
 
 	_end: ->
+
+		if @_stopCallback?
+
+			@_stopCallback @_event
 
 		@_mightBe = no
 
