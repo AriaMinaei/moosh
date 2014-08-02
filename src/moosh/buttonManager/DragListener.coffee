@@ -202,10 +202,6 @@ module.exports = class DragListener extends _Listener
 
 				@_upCallback @_event
 
-			if @_endCallback?
-
-				@_endCallback @_event
-
 		do @_end
 
 		return
