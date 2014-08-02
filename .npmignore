@@ -1,15 +1,9 @@
 *.bat
 .htaccess
 
-xeno/**
-scripts/coffee/pg/**
-node_modules
-
--p
-
-pg/**
+src
 
 npm-debug.log
 !*.gitkeep
 
-pg-html/**
+node_modules
