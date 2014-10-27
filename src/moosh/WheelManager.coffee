@@ -1,4 +1,4 @@
-array = require 'utila/scripts/js/lib/array'
+array = require 'utila/lib/array'
 WheelListener = require './wheelManager/WheelListener'
 
 module.exports = class WheelManager

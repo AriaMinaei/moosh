@@ -1,4 +1,4 @@
-array = require 'utila/scripts/js/lib/array'
+array = require 'utila/lib/array'
 HoverListener = require './hoverManager/HoverListener'
 
 module.exports = class HoverManager

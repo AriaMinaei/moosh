@@ -1,7 +1,7 @@
 HoverManager = require './moosh/HoverManager'
 WheelManager = require './moosh/WheelManager'
 ButtonManager = require './moosh/ButtonManager'
-array = require 'utila/scripts/js/lib/array'
+array = require 'utila/lib/array'
 
 module.exports = class Moosh
 

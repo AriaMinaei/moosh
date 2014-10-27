@@ -1,4 +1,4 @@
-array = require 'utila/scripts/js/lib/array'
+array = require 'utila/lib/array'
 DragListener = require './buttonManager/DragListener'
 ClickListener = require './buttonManager/ClickListener'
 
