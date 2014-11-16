@@ -1,13 +1,13 @@
 {
   "name": "moosh",
-  "version": "0.1.0-beta.21",
+  "version": "0.1.0-beta.22",
   "description": "(work in progress)",
   "main": "lib/Moosh.js",
   "scripts": {
     "prepublish": "coffee --bare --compile --output ./lib ./src"
   },
   "dependencies": {
-    "utila": "0.3.0-beta1"
+    "utila": "~0.4.0"
   },
   "devDependencies": {
     "coffee-script": "~1.6.3"
