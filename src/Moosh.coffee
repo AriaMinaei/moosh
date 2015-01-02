@@ -215,6 +215,8 @@ module.exports = class Moosh
 
 	_mousedown: (e) ->
 
+		return if e.target.tagName in ['INPUT', 'SELECT', 'TEXTAREA', 'OPTION']
+
 		ancestors = @_getNodeAncestors e.target
 
 		if ancestors[0] in @_nodesToIgnore

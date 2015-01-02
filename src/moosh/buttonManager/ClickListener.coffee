@@ -192,7 +192,7 @@ module.exports = class ClickListener extends _Listener
 
 		super
 
-		@_lastReceivedMouseEvent.preventDefault()
+		# @_lastReceivedMouseEvent.preventDefault()
 
 		return
 

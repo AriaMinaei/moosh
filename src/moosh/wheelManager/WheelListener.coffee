@@ -8,7 +8,7 @@ module.exports = class WheelListener extends _Listener
 
 		@_callback = null
 
-		@_preventDefault = yes
+		@_preventDefault = no
 
 	preventDefault: ->
 

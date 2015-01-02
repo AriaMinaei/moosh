@@ -31,7 +31,7 @@ module.exports = class DragListener extends _Listener
 
 		super
 
-		@_lastReceivedMouseEvent.preventDefault()
+		# @_lastReceivedMouseEvent.preventDefault()
 
 		@_event.absX = @_event.pageX - @_startPageX
 		@_event.absY = @_event.pageY - @_startPageY
