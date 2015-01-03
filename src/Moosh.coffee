@@ -21,6 +21,9 @@ module.exports = class Moosh
 
 		@_nodesToIgnore = []
 
+		# We're gonna need a better name for this
+		@_listOfNodesToMakeUsIgnoreAllEventsOriginatingInThem = []
+
 		@current = {x: 0, y: 0}
 
 		@_scrollingDisabled = no
@@ -223,6 +226,10 @@ module.exports = class Moosh
 
 			ancestors.shift()
 
+		for ancestor in ancestors
+
+			return if ancestor in @_listOfNodesToMakeUsIgnoreAllEventsOriginatingInThem
+
 		if e.button is 0
 
 			@_closeModalsIfNecessary e, ancestors
@@ -416,6 +423,26 @@ module.exports = class Moosh
 		return unless data in @_nodesToIgnore
 
 		array.pluckOneItem @_nodesToIgnore, data
+
+		@
+
+	ignoreAllEventsOriginatingInThisNode: (node) ->
+
+		data = @_getNodeDataForListeners node
+
+		return if data in @_listOfNodesToMakeUsIgnoreAllEventsOriginatingInThem
+
+		@_listOfNodesToMakeUsIgnoreAllEventsOriginatingInThem.push data
+
+		@
+
+	unignoreAllEventsOriginatingInThisNode: (node) ->
+
+		data = @_getNodeDataForListeners node
+
+		return unless data in @_listOfNodesToMakeUsIgnoreAllEventsOriginatingInThem
+
+		array.pluckOneItem @_listOfNodesToMakeUsIgnoreAllEventsOriginatingInThem, data
 
 		@
 
