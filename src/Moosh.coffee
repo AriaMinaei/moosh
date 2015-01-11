@@ -36,6 +36,8 @@ module.exports = class Moosh
 		@_middles = new ButtonManager @, 'middle', 1
 		@_rights = new ButtonManager @, 'right', 2
 
+		@_currentTouchId = null
+
 		body = document.body
 
 		body.addEventListener 'mousedown', (e) =>
@@ -204,7 +206,19 @@ module.exports = class Moosh
 
 			touchEvent.preventDefault()
 
-		e = touchEvent.changedTouches[0]
+		for touch in touchEvent.changedTouches
+
+			if touch.identifier is @_currentTouchId
+
+				e = touch
+
+				break
+
+		unless e?
+
+			touchEvent.preventDefault()
+
+			return
 
 		# let's use these hacks until we come up with
 		# a better solution
@@ -250,7 +264,15 @@ module.exports = class Moosh
 
 	_touchstart: (touchEvent) ->
 
+		if @_currentTouchId?
+
+			touchEvent.preventDefault()
+
+			return
+
 		e = touchEvent.changedTouches[0]
+
+		@_currentTouchId = e.identifier
 
 		e.preventDefault = touchEvent.preventDefault.bind(touchEvent)
 		e.button = 0
@@ -280,7 +302,21 @@ module.exports = class Moosh
 
 	_touchend: (touchEvent) ->
 
-		e = touchEvent.changedTouches[0]
+		for touch in touchEvent.changedTouches
+
+			if touch.identifier is @_currentTouchId
+
+				e = touch
+
+				break
+
+		unless e?
+
+			touchEvent.preventDefault()
+
+			return
+
+		@_currentTouchId = null
 
 		e.preventDefault = touchEvent.preventDefault.bind(touchEvent)
 		e.button = 0
