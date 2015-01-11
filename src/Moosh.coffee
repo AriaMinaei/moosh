@@ -272,6 +272,8 @@ module.exports = class Moosh
 
 		e = touchEvent.changedTouches[0]
 
+		@_fixMousePosition {screenX: e.screenX, screenY: e.screenY, target: e.target}
+
 		@_currentTouchId = e.identifier
 
 		e.preventDefault = touchEvent.preventDefault.bind(touchEvent)
@@ -324,7 +326,26 @@ module.exports = class Moosh
 
 		@_mouseup e
 
+		setTimeout =>
+
+			@_fixMousePosition()
+
+		, 0
+
 		return
+
+	_fixMousePosition: (fakeEvent = {}) ->
+
+		fakeEvent.screenX ?= -1000
+		fakeEvent.screenY ?= -1000
+		fakeEvent.target ?= document.body
+
+		ancestors = @_getNodeAncestors fakeEvent.target
+
+		@_hovers.handleMouseMove fakeEvent, ancestors
+		@_lefts.handleMouseMove fakeEvent, ancestors
+		@_rights.handleMouseMove fakeEvent, ancestors
+		@_middles.handleMouseMove fakeEvent, ancestors
 
 	_mousewheel: (e) ->
 
