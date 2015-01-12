@@ -304,6 +304,8 @@ module.exports = class Moosh
 
 	_touchend: (touchEvent) ->
 
+		touchEvent.preventDefault()
+
 		for touch in touchEvent.changedTouches
 
 			if touch.identifier is @_currentTouchId
