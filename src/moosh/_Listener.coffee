@@ -35,11 +35,25 @@ module.exports = class _Listener
 			layerX: 0
 			layerY: 0
 
-			clientRect: null
-
 			preventDefault: => @_lastReceivedMouseEvent.preventDefault()
 
 			originalEvent: null
+
+			_clientRect: null
+
+		Object.defineProperty @_event, 'clientRect', get: =>
+
+			unless @_event._clientRect?
+
+				@_event._clientRect = @_nodeData.node.getBoundingClientRect()
+
+			@_event._clientRect
+
+		Object.defineProperty @_event, 'layerX', get: => @_event.clientX - @_event.clientRect.left
+		Object.defineProperty @_event, 'layerY', get: => @_event.clientY - @_event.clientRect.top
+
+		Object.defineProperty @_event, 'fractionX', get: => @_event.layerX / @_event.clientRect.width
+		Object.defineProperty @_event, 'fractionY', get: => @_event.layerY / @_event.clientRect.height
 
 		@_active = no
 
@@ -92,16 +106,9 @@ module.exports = class _Listener
 		@_event.pageX = e.pageX
 		@_event.pageY = e.pageY
 
-		rect = @_nodeData.node.getBoundingClientRect()
-		@_event.clientRect = rect
-
-		@_event.layerX = e.clientX - rect.left
-		@_event.layerY = e.clientY - rect.top
-
-		@_event.fractionX = @_event.layerX / rect.width
-		@_event.fractionY = @_event.layerY / rect.height
-
 		@_event.originalEvent = e
+
+		@_event._clientRect = null
 
 		return
 

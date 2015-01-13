@@ -270,6 +270,7 @@ module.exports = class Moosh
 
 		e = touchEvent.changedTouches[0]
 
+
 		@_fixMousePosition {screenX: e.screenX, screenY: e.screenY, target: e.target}
 
 		@_currentTouchId = e.identifier
