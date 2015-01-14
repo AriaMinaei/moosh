@@ -52,6 +52,14 @@ module.exports = class Moosh
 
 			@_mousemove e
 
+		body.addEventListener 'click', (e) =>
+
+			e.preventDefault()
+			e.stopPropagation()
+
+			false
+		, no
+
 		body.addEventListener 'mousewheel', (e) =>
 
 			@_mousewheel e
