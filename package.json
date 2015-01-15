@@ -7,7 +7,7 @@
     "prepublish": "coffee --bare --compile --output ./lib ./src"
   },
   "dependencies": {
-    "utila": "~0.4.0"
+    "utila": "~0.5.0-dev.1"
   },
   "devDependencies": {
     "coffee-script": "~1.8.0",

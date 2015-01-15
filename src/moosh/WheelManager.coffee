@@ -1,5 +1,5 @@
 array = require 'utila/lib/array'
-WheelListener = require './wheelManager/WheelListener'
+WheelDetector = require './wheelManager/WheelDetector'
 
 module.exports = class WheelManager
 
@@ -9,9 +9,9 @@ module.exports = class WheelManager
 
 	onWheel: (nodeData, args) ->
 
-		l = new WheelListener @, nodeData, args
+		l = new WheelDetector @, nodeData, args
 
-		nodeData.wheelListeners.push l
+		nodeData.wheelDetectors.push l
 
 		l
 
@@ -20,7 +20,7 @@ module.exports = class WheelManager
 		for nodeData in ancestors
 
 			# let's iterate through all of this node's wheel listeners
-			for listener in nodeData.wheelListeners
+			for listener in nodeData.wheelDetectors
 
 				listener._handleMouseWheel e
 

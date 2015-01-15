@@ -1,62 +1,48 @@
-_Listener = require '../_Listener'
+GestureDetector = require '../GestureDetector'
 
-module.exports = class HoverListener extends _Listener
+module.exports = class HoverDetector extends GestureDetector
 
 	constructor: (@_manager, @_nodeData) ->
 
 		super
 
-		@_mouseIsOverNode = no # or @_isActive
-
-		@_enterCallback = null
-		@_moveCallback = null
-		@_leaveCallback = null
+		@_mouseIsOverNode = no
 
 		@_lastReceivedMouseEvent = null
 
 	_startCombo: ->
 
-		if @_mouseIsOverNode
-
-			do @_enter
+		@_enter() if @_mouseIsOverNode
 
 		return
 
 	_endCombo: ->
 
-		if @_mouseIsOverNode
-
-			do @_leave
+		@_leave() if @_mouseIsOverNode
 
 		return
 
 	_enter: ->
 
-		do @_modifyEvent
+		@_modifyEvent()
 
-		if @_enterCallback?
-
-			@_enterCallback @_event
+		@_emit 'enter', @_event
 
 		return
 
 	_move: ->
 
-		do @_modifyEvent
+		@_modifyEvent()
 
-		if @_moveCallback?
-
-			@_moveCallback @_event
+		@_emit 'move', @_event
 
 		return
 
 	_leave: ->
 
-		do @_modifyEvent
+		@_modifyEvent()
 
-		if @_leaveCallback?
-
-			@_leaveCallback @_event
+		@_emit 'leave', @_event
 
 		return
 
@@ -73,11 +59,9 @@ module.exports = class HoverListener extends _Listener
 		# if the mousemove event is outside this listener
 		if ancestors.indexOf(@_nodeData) is -1
 
-			do @_deactivate
+			@_deactivate()
 
-			if @_comboSatisfies
-
-				do @_leave
+			@_leave() if @_comboSatisfies
 
 		return
 
@@ -89,17 +73,13 @@ module.exports = class HoverListener extends _Listener
 
 		if @_mouseIsOverNode
 
-			if @_comboSatisfies
-
-				do @_move
+			@_move() if @_comboSatisfies
 
 		else
 
-			do @_activate
+			@_activate()
 
-			if @_comboSatisfies
-
-				do @_enter
+			@_enter() if @_comboSatisfies
 
 		return
 
@@ -111,7 +91,7 @@ module.exports = class HoverListener extends _Listener
 
 		@_mouseIsOverNode = yes
 
-		@_manager._addListenerToActiveListenersList @
+		@_manager._addDetectorToActiveDetectorsList @
 
 		return
 
@@ -123,25 +103,25 @@ module.exports = class HoverListener extends _Listener
 
 		@_mouseIsOverNode = no
 
-		@_manager._removeListenerFromActiveListenersList @
+		@_manager._removeDetectorFromActiveDetectorsList @
 
 		return
 
 	onEnter: (cb) ->
 
-		@_enterCallback = cb
+		@on 'enter', cb
 
 		@
 
 	onMove: (cb) ->
 
-		@_moveCallback = cb
+		@on 'move', cb
 
 		@
 
 	onLeave: (cb) ->
 
-		@_leaveCallback = cb
+		@on 'leave', cb
 
 		@
 

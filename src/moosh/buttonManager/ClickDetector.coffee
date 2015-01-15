@@ -1,14 +1,8 @@
-_Listener = require '../_Listener'
+GestureDetector = require '../GestureDetector'
 
-module.exports = class ClickListener extends _Listener
+module.exports = class ClickDetector extends GestureDetector
 
 	constructor: (@_manager, @_nodeData, args) ->
-
-		@_downCallback = null
-		@_upCallback = null
-		@_cancelCallback = null
-		@_doneCallback = null
-		@_releaseComboCallback = null
 
 		@_repeats = 1
 
@@ -23,29 +17,29 @@ module.exports = class ClickListener extends _Listener
 
 			@onDone args[0]
 
-		@_event.cancel = => do @_cancel
+		@_event.cancel = => @_cancel()
 
 	onDown: (cb) ->
 
-		@_downCallback = cb
+		@on 'down', cb
 
 		@
 
 	onUp: (cb) ->
 
-		@_upCallback = cb
+		@on 'up', cb
 
 		@
 
 	onCancel: (cb) ->
 
-		@_cancelCallback = cb
+		@on 'cancel', cb
 
 		@
 
 	onDone: (cb) ->
 
-		@_doneCallback = cb
+		@on 'done', cb
 
 		return
 
@@ -65,19 +59,19 @@ module.exports = class ClickListener extends _Listener
 
 	_endCombo: ->
 
-		do @_cancel
+		@_cancel()
 
 		return
 
 	onReleaseCombo: (cb) ->
 
-		@_releaseComboCallback = cb
+		@on 'releaseCombo', cb
 
 		@
 
 	_endCombo: ->
 
-		do @_cancel
+		@_cancel()
 
 		return
 
@@ -85,9 +79,7 @@ module.exports = class ClickListener extends _Listener
 
 		return unless @_active and @enabled
 
-		if @_releaseComboCallback?
-
-			@_releaseComboCallback @_event
+		@_emit 'releaseCombo', @_event
 
 		return
 
@@ -103,21 +95,19 @@ module.exports = class ClickListener extends _Listener
 
 		Math.abs(Math.abs(e.pageY) - Math.abs(@_startPageY)) > 5
 
-			do @_cancel
+			@_cancel()
 
 		return
 
 	_cancel: ->
 
-		if @_active
+		return unless @_active
 
-			@_active = no
+		@_active = no
 
-			@_manager._removeListenerFromActiveListenersList @
+		@_manager._removeDetectorFromActiveDetectorsList @
 
-			if @_cancelCallback
-
-				@_cancelCallback @_event
+		@_emit 'cancel', @_event
 
 		return
 
@@ -133,16 +123,14 @@ module.exports = class ClickListener extends _Listener
 
 			@_active = yes
 
-			@_manager._addListenerToActiveListenersList @
+			@_manager._addDetectorToActiveDetectorsList @
 
 			@_startPageX = e.pageX
 			@_startPageY = e.pageY
 
-		do @_modifyEvent
+		@_modifyEvent()
 
-		if @_downCallback?
-
-			@_downCallback @_event
+		@_emit 'down', @_event
 
 		if @_repeats > 1
 
@@ -152,7 +140,7 @@ module.exports = class ClickListener extends _Listener
 
 			@_lastRepeatCheckTimeout = setTimeout =>
 
-				do @_cancel
+				@_cancel()
 
 			, 300
 
@@ -164,25 +152,21 @@ module.exports = class ClickListener extends _Listener
 
 		@_lastReceivedMouseEvent = e
 
-		do @_modifyEvent
+		@_modifyEvent()
 
 		@_event.repeats = e.detail
 
-		if @_upCallback?
-
-			@_upCallback @_event
+		@_emit 'up', @_event
 
 		if e.detail >= @_repeats
 
 			@_manager._cancelOthers @
 
-			@_manager._removeListenerFromActiveListenersList @
+			@_manager._removeDetectorFromActiveDetectorsList @
 
 			@_active = no
 
-			if @_doneCallback?
-
-				@_doneCallback @_event
+			@_emit 'done', @_event
 
 			clearTimeout @_lastRepeatCheckTimeout
 
@@ -198,7 +182,7 @@ module.exports = class ClickListener extends _Listener
 
 	detach: ->
 
-		do @_cancel
+		@_cancel()
 
 		super
 
@@ -208,6 +192,6 @@ module.exports = class ClickListener extends _Listener
 
 		super
 
-		do @_cancel
+		@_cancel()
 
 		@

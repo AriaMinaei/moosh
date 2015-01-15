@@ -1,6 +1,6 @@
-_Listener = require '../_Listener'
+GestureDetector = require '../GestureDetector'
 
-module.exports = class WheelListener extends _Listener
+module.exports = class WheelDetector extends GestureDetector
 
 	constructor: (@_manager, @_nodeData) ->
 
@@ -20,7 +20,7 @@ module.exports = class WheelListener extends _Listener
 
 	onWheel: (cb) ->
 
-		@_callback = cb
+		@on 'wheel', cb
 
 		@
 
@@ -46,8 +46,6 @@ module.exports = class WheelListener extends _Listener
 
 		do @_modifyEvent
 
-		if @_callback?
-
-			@_callback @_event
+		@_emit 'wheel', @_event
 
 		return

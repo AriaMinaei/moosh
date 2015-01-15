@@ -115,23 +115,23 @@ module.exports = class Moosh
 				id: id
 				node: node
 
-				hoverListeners: []
-				wheelListeners: []
+				hoverDetectors: []
+				wheelDetectors: []
 
 				left:
 
-					clickListeners: []
-					dragListeners: []
+					clickDetectors: []
+					dragDetectors: []
 
 				right:
 
-					clickListeners: []
-					dragListeners: []
+					clickDetectors: []
+					dragDetectors: []
 
 				middle:
 
-					clickListeners: []
-					dragListeners: []
+					clickDetectors: []
+					dragDetectors: []
 
 				callbacksForClickOutside: []
 
@@ -147,18 +147,18 @@ module.exports = class Moosh
 
 			data = @_nodesData[id]
 
-			l.detach() for l in data.hoverListeners
+			l.detach() for l in data.hoverDetectors
 
-			l.detach() for l in data.wheelListeners
+			l.detach() for l in data.wheelDetectors
 
-			l.detach() for l in data.left.clickListeners
-			l.detach() for l in data.left.dragListeners
+			l.detach() for l in data.left.clickDetectors
+			l.detach() for l in data.left.dragDetectors
 
-			l.detach() for l in data.right.clickListeners
-			l.detach() for l in data.right.dragListeners
+			l.detach() for l in data.right.clickDetectors
+			l.detach() for l in data.right.dragDetectors
 
-			l.detach() for l in data.middle.clickListeners
-			l.detach() for l in data.middle.dragListeners
+			l.detach() for l in data.middle.clickDetectors
+			l.detach() for l in data.middle.dragDetectors
 
 			node.removeAttribute "data-moosh-#{@id}-id"
 
@@ -368,7 +368,7 @@ module.exports = class Moosh
 
 		e.preventDefault() if @_scrollingDisabled
 
-	_getNodeDataForListeners: (node) ->
+	_getNodeDataForDetectors: (node) ->
 
 		node = @_getHtmlNode node
 
@@ -402,7 +402,7 @@ module.exports = class Moosh
 
 	onClickOutside: (node, cb) ->
 
-		nodeData = @_getNodeDataForListeners node
+		nodeData = @_getNodeDataForDetectors node
 
 		if @_openModals.indexOf(nodeData) is -1
 
@@ -414,7 +414,7 @@ module.exports = class Moosh
 
 	discardClickOutside: (node) ->
 
-		nodeData = @_getNodeDataForListeners node
+		nodeData = @_getNodeDataForDetectors node
 
 		if @_openModals.indexOf(nodeData) isnt -1
 
@@ -426,55 +426,55 @@ module.exports = class Moosh
 
 	onHover: (node, rest...) ->
 
-		data = @_getNodeDataForListeners node
+		data = @_getNodeDataForDetectors node
 
 		@_hovers.onHover data, rest
 
 	onWheel: (node, rest...) ->
 
-		data = @_getNodeDataForListeners node
+		data = @_getNodeDataForDetectors node
 
 		@_wheels.onWheel data, rest
 
 	onLeftClick: (node, rest...) ->
 
-		data = @_getNodeDataForListeners node
+		data = @_getNodeDataForDetectors node
 
 		@_lefts.onClick data, rest
 
 	onRightClick: (node, rest...) ->
 
-		data = @_getNodeDataForListeners node
+		data = @_getNodeDataForDetectors node
 
 		@_rights.onClick data, rest
 
 	onMiddleClick: (node, rest...) ->
 
-		data = @_getNodeDataForListeners node
+		data = @_getNodeDataForDetectors node
 
 		@_middles.onClick data, rest
 
 	onLeftDrag: (node, rest...) ->
 
-		data = @_getNodeDataForListeners node
+		data = @_getNodeDataForDetectors node
 
 		@_lefts.onDrag data, rest
 
 	onRightDrag: (node, rest...) ->
 
-		data = @_getNodeDataForListeners node
+		data = @_getNodeDataForDetectors node
 
 		@_rights.onDrag data, rest
 
 	onMiddleDrag: (node, rest...) ->
 
-		data = @_getNodeDataForListeners node
+		data = @_getNodeDataForDetectors node
 
 		@_middles.onDrag data, rest
 
 	ignore: (node) ->
 
-		data = @_getNodeDataForListeners node
+		data = @_getNodeDataForDetectors node
 
 		return if data in @_nodesToIgnore
 
@@ -484,7 +484,7 @@ module.exports = class Moosh
 
 	unignore: (node) ->
 
-		data = @_getNodeDataForListeners node
+		data = @_getNodeDataForDetectors node
 
 		return unless data in @_nodesToIgnore
 
@@ -494,7 +494,7 @@ module.exports = class Moosh
 
 	ignoreAllEventsOriginatingInThisNode: (node) ->
 
-		data = @_getNodeDataForListeners node
+		data = @_getNodeDataForDetectors node
 
 		return if data in @_listOfNodesToMakeUsIgnoreAllEventsOriginatingInThem
 
@@ -504,7 +504,7 @@ module.exports = class Moosh
 
 	unignoreAllEventsOriginatingInThisNode: (node) ->
 
-		data = @_getNodeDataForListeners node
+		data = @_getNodeDataForDetectors node
 
 		return unless data in @_listOfNodesToMakeUsIgnoreAllEventsOriginatingInThem
 

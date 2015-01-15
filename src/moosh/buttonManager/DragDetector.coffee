@@ -1,17 +1,9 @@
-_Listener = require '../_Listener'
+GestureDetector = require '../GestureDetector'
 
-module.exports = class DragListener extends _Listener
+module.exports = class DragDetector extends GestureDetector
 
 	constructor: (@_manager, @_nodeData) ->
 
-		@_downCallback = null
-		@_upCallback = null
-		@_startCallback = null
-		@_endCallback = null
-		@_stopCallback = null
-		@_cancelCallback = null
-		@_dragCallback = null
-		@_releaseComboCallback = null
 		@_onStateCallback = null
 		@_onStateNameCallback = {}
 
@@ -25,13 +17,11 @@ module.exports = class DragListener extends _Listener
 
 		super
 
-		@_event.cancel = => do @_cancel
+		@_event.cancel = => @_cancel()
 
 	_modifyEvent: ->
 
 		super
-
-		# @_lastReceivedMouseEvent.preventDefault()
 
 		@_event.absX = @_event.pageX - @_startPageX
 		@_event.absY = @_event.pageY - @_startPageY
@@ -46,49 +36,49 @@ module.exports = class DragListener extends _Listener
 
 	onDown: (cb) ->
 
-		@_downCallback = cb
+		@on 'down', cb
 
 		@
 
 	onUp: (cb) ->
 
-		@_upCallback = cb
+		@on 'up', cb
 
 		@
 
 	onStart: (cb) ->
 
-		@_startCallback = cb
+		@on 'start', cb
 
 		@
 
 	onStop: (cb) ->
 
-		@_stopCallback = cb
+		@on 'stop', cb
 
 		@
 
 	onEnd: (cb) ->
 
-		@_endCallback = cb
+		@on 'end', cb
 
 		@
 
 	onCancel: (cb) ->
 
-		@_cancelCallback = cb
+		@on 'cancel', cb
 
 		@
 
 	onDrag: (cb) ->
 
-		@_dragCallback = cb
+		@on 'drag', cb
 
 		@
 
 	onReleaseCombo: (cb) ->
 
-		@_releaseComboCallback = cb
+		@on 'releaseCombo', cb
 
 		@
 
@@ -115,9 +105,9 @@ module.exports = class DragListener extends _Listener
 
 	_stateIs: (name) ->
 
-		do @_onStateNameCallback[name] if @_onStateNameCallback[name]?
+		@_onStateNameCallback[name]() if @_onStateNameCallback[name]?
 
-		do @_stateChanged
+		@_stateChanged()
 
 	_stateChanged: ->
 
@@ -125,29 +115,25 @@ module.exports = class DragListener extends _Listener
 
 	_endCombo: ->
 
-		do @_cancel
+		@_cancel()
 
 		return
 
 	_releaseCombo: ->
 
-		if @_mightBe
+		return unless @_mightBe
 
-			if @_releaseComboCallback?
-
-				@_releaseComboCallback @_event
+		@_emit 'releaseCombo', @_event
 
 		return
 
 	_cancel: ->
 
-		if @_mightBe
+		return unless @_mightBe
 
-			do @_end
+		@_end()
 
-			if @_cancelCallback?
-
-				@_cancelCallback @_event
+		@_emit 'cancel', @_event
 
 		return
 
@@ -162,7 +148,7 @@ module.exports = class DragListener extends _Listener
 		@_mightBe = yes
 		@_firstTime = yes
 
-		@_manager._addListenerToActiveListenersList @
+		@_manager._addDetectorToActiveDetectorsList @
 
 		@_startPageX = e.pageX
 		@_startPageY = e.pageY
@@ -170,15 +156,11 @@ module.exports = class DragListener extends _Listener
 		@_lastPageX  = e.pageX
 		@_lastPageY  = e.pageY
 
-		do @_modifyEvent
+		@_modifyEvent()
 
-		if @_downCallback?
+		@_emit 'down', @_event
 
-			@_downCallback @_event
-
-		if @_startCallback?
-
-			@_startCallback @_event
+		@_emit 'start', @_event
 
 		return
 
@@ -188,21 +170,19 @@ module.exports = class DragListener extends _Listener
 
 		@_lastReceivedMouseEvent = e
 
-		do @_modifyEvent
+		@_modifyEvent()
 
 		if @_firstTime
 
-			do @_cancel
+			@_cancel()
 
 			return
 
 		else
 
-			if @_upCallback?
+			@_emit 'up', @_event
 
-				@_upCallback @_event
-
-		do @_end
+		@_end()
 
 		return
 
@@ -212,7 +192,7 @@ module.exports = class DragListener extends _Listener
 
 		@_lastReceivedMouseEvent = e
 
-		do @_modifyEvent
+		@_modifyEvent()
 
 		if @_firstTime
 
@@ -224,22 +204,20 @@ module.exports = class DragListener extends _Listener
 
 			@_active = yes
 
-			do @_stateChanged
+			@_stateChanged()
 
 			for name in @_activeStates
 
-				do @_onStateNameCallback[name] if @_onStateNameCallback[name]?
+				@_onStateNameCallback[name]() if @_onStateNameCallback[name]?
 
-		if @_dragCallback?
-
-			@_dragCallback @_event
+		@_emit 'drag', @_event
 
 		return
 
 
 	detach: ->
 
-		do @_cancel
+		@_cancel()
 
 		super
 
@@ -249,24 +227,20 @@ module.exports = class DragListener extends _Listener
 
 		super
 
-		do @_cancel
+		@_cancel()
 
 		@
 
 	_end: ->
 
-		if @_stopCallback?
-
-			@_stopCallback @_event
+		@_emit 'stop', @_event
 
 		@_mightBe = no
 
 		@_active = no
 
-		if @_endCallback?
+		@_emit 'end', @_event
 
-			@_endCallback @_event
-
-		@_manager._removeListenerFromActiveListenersList @
+		@_manager._removeDetectorFromActiveDetectorsList @
 
 		return

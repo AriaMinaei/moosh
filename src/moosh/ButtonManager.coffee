@@ -1,6 +1,6 @@
 array = require 'utila/lib/array'
-DragListener = require './buttonManager/DragListener'
-ClickListener = require './buttonManager/ClickListener'
+DragDetector = require './buttonManager/DragDetector'
+ClickDetector = require './buttonManager/ClickDetector'
 
 module.exports = class ButtonManager
 
@@ -8,52 +8,52 @@ module.exports = class ButtonManager
 
 		@_kilidScope = @clickManager._kilidScope
 
-		@_activeListeners = []
+		@_activeDetectors = []
 
-	_removeListenerFromActiveListenersList: (listener) ->
+	_removeDetectorFromActiveDetectorsList: (listener) ->
 
-		array.pluckOneItem @_activeListeners, listener
-
-		return
-
-	_addListenerToActiveListenersList: (listener) ->
-
-		@_activeListeners.push listener
+		array.pluckOneItem @_activeDetectors, listener
 
 		return
 
-	_cancelOthers: (activeListener) ->
+	_addDetectorToActiveDetectorsList: (listener) ->
 
-		lastLength = @_activeListeners.length
+		@_activeDetectors.push listener
+
+		return
+
+	_cancelOthers: (activeDetector) ->
+
+		lastLength = @_activeDetectors.length
 		i = 0
 
 		while lastLength > 0
 
-			listener = @_activeListeners[i]
+			listener = @_activeDetectors[i]
 
 			return unless listener?
 
-			if activeListener isnt listener
+			if activeDetector isnt listener
 
 				do listener._cancel
 
-			newLength = @_activeListeners.length
+			newLength = @_activeDetectors.length
 
 			i += newLength - lastLength + 1
 
 			lastLength = newLength
 
-		@_activeListeners = [activeListener]
+		@_activeDetectors = [activeDetector]
 
 	handleMouseDown: (e, ancestors) ->
 
 		for nodeData in ancestors
 
-			for listener in nodeData[@keyName].clickListeners
+			for listener in nodeData[@keyName].clickDetectors
 
 				listener._handleMouseDown e
 
-			for listener in nodeData[@keyName].dragListeners
+			for listener in nodeData[@keyName].dragDetectors
 
 				listener._handleMouseDown e
 
@@ -61,18 +61,18 @@ module.exports = class ButtonManager
 
 	handleMouseMove: (e, ancestors) ->
 
-		lastLength = @_activeListeners.length
+		lastLength = @_activeDetectors.length
 		i = 0
 
 		while lastLength > 0
 
-			listener = @_activeListeners[i]
+			listener = @_activeDetectors[i]
 
 			return unless listener?
 
 			listener._handleMouseMove e
 
-			newLength = @_activeListeners.length
+			newLength = @_activeDetectors.length
 
 			i += newLength - lastLength + 1
 
@@ -82,18 +82,18 @@ module.exports = class ButtonManager
 
 	handleMouseUp: (e, ancestors) ->
 
-		lastLength = @_activeListeners.length
+		lastLength = @_activeDetectors.length
 		i = 0
 
 		while lastLength > 0
 
-			listener = @_activeListeners[i]
+			listener = @_activeDetectors[i]
 
 			return unless listener?
 
 			listener._handleMouseUp e
 
-			newLength = @_activeListeners.length
+			newLength = @_activeDetectors.length
 
 			i += newLength - lastLength + 1
 
@@ -103,16 +103,16 @@ module.exports = class ButtonManager
 
 	onClick: (nodeData, args) ->
 
-		l = new ClickListener @, nodeData, args
+		l = new ClickDetector @, nodeData, args
 
-		nodeData[@keyName].clickListeners.push l
+		nodeData[@keyName].clickDetectors.push l
 
 		l
 
 	onDrag: (nodeData, args) ->
 
-		l = new DragListener @, nodeData, args
+		l = new DragDetector @, nodeData, args
 
-		nodeData[@keyName].dragListeners.push l
+		nodeData[@keyName].dragDetectors.push l
 
 		l
