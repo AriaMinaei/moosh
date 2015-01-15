@@ -13,11 +13,11 @@ module.exports = class ClickHandler extends GestureHandler
 
 		super
 
-		if args[0] instanceof Function
 
-			@onDone args[0]
 
 		@_event.cancel = => @_cancel()
+
+
 
 	onDown: (cb) ->
 

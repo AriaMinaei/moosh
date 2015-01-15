@@ -142,17 +142,21 @@ module.exports = class ButtonManager
 
 	onClick: (nodeData, args) ->
 
-		handler = nodeData.clickHandler
+		handler = nodeData[@keyName].clickHandler
 
 		unless handler?
 
 			handler = nodeData[@keyName].clickHandler = new ClickHandler @, nodeData, args
 
+		if args[0] instanceof Function
+
+			handler.onDone args[0]
+
 		handler
 
 	onDrag: (nodeData, args) ->
 
-		handler = nodeData.dragHandler
+		handler = nodeData[@keyName].dragHandler
 
 		unless handler?
 
