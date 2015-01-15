@@ -194,14 +194,14 @@ module.exports = class Moosh
 
 		ancestors
 
-	_mousemove: (e) ->
+	_mousemove: (e, includeHover = yes) ->
 
 		@current.x = e.screenX
 		@current.y = e.screenY
 
 		ancestors = @_getNodeAncestors e.target
 
-		@_hovers.handleMouseMove e, ancestors
+		@_hovers.handleMouseMove e, ancestors if includeHover
 		@_lefts.handleMouseMove e, ancestors
 		@_rights.handleMouseMove e, ancestors
 		@_middles.handleMouseMove e, ancestors
@@ -234,7 +234,7 @@ module.exports = class Moosh
 		e.button = 0
 		e.detail = 1
 
-		@_mousemove e
+		@_mousemove e, no
 
 		return
 
@@ -351,7 +351,7 @@ module.exports = class Moosh
 
 		ancestors = @_getNodeAncestors fakeEvent.target
 
-		@_hovers.handleMouseMove fakeEvent, ancestors
+		# @_hovers.handleMouseMove fakeEvent, ancestors
 		@_lefts.handleMouseMove fakeEvent, ancestors
 		@_rights.handleMouseMove fakeEvent, ancestors
 		@_middles.handleMouseMove fakeEvent, ancestors
