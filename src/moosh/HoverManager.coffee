@@ -11,11 +11,13 @@ module.exports = class HoverManager
 
 	onHover: (nodeData, args) ->
 
-		l = new HoverDetector @, nodeData, args
+		detector = nodeData.hoverDetector
 
-		nodeData.hoverDetectors.push l
+		unless detector?
 
-		l
+			detector = nodeData.hoverDetector = new HoverDetector @, nodeData, args
+
+		detector
 
 	handleMouseMove: (e, ancestors) ->
 
@@ -24,29 +26,27 @@ module.exports = class HoverManager
 		for nodeData in ancestors
 
 			# let's iterate through all of this node's hover listeners
-			for listener in nodeData.hoverDetectors
-
-				listener._handleMouseMove e
+			nodeData.hoverDetector?._handleMouseMove e
 
 		return
 
 	# calls 'leave' on elements outside the pointer
 	_checkMouseLeaveForActiveDetectors: (e, ancestors) ->
 
-		for listener in @_activeDetectors.slice 0
+		for detector in @_activeDetectors.slice 0
 
-			listener._checkIfShouldLeave e, ancestors
-
-		return
-
-	_removeDetectorFromActiveDetectorsList: (listener) ->
-
-		array.pluckOneItem @_activeDetectors, listener
+			detector._checkIfShouldLeave e, ancestors
 
 		return
 
-	_addDetectorToActiveDetectorsList: (listener) ->
+	_removeDetectorFromActiveDetectorsList: (detector) ->
 
-		@_activeDetectors.push listener
+		array.pluckOneItem @_activeDetectors, detector
+
+		return
+
+	_addDetectorToActiveDetectorsList: (detector) ->
+
+		@_activeDetectors.push detector
 
 		return

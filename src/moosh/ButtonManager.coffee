@@ -10,15 +10,15 @@ module.exports = class ButtonManager
 
 		@_activeDetectors = []
 
-	_removeDetectorFromActiveDetectorsList: (listener) ->
+	_removeDetectorFromActiveDetectorsList: (detector) ->
 
-		array.pluckOneItem @_activeDetectors, listener
+		array.pluckOneItem @_activeDetectors, detector
 
 		return
 
-	_addDetectorToActiveDetectorsList: (listener) ->
+	_addDetectorToActiveDetectorsList: (detector) ->
 
-		@_activeDetectors.push listener
+		@_activeDetectors.push detector
 
 		return
 
@@ -29,13 +29,13 @@ module.exports = class ButtonManager
 
 		while lastLength > 0
 
-			listener = @_activeDetectors[i]
+			detector = @_activeDetectors[i]
 
-			return unless listener?
+			return unless detector?
 
-			if activeDetector isnt listener
+			if activeDetector isnt detector
 
-				do listener._cancel
+				do detector._cancel
 
 			newLength = @_activeDetectors.length
 
@@ -49,13 +49,9 @@ module.exports = class ButtonManager
 
 		for nodeData in ancestors
 
-			for listener in nodeData[@keyName].clickDetectors
+			nodeData[@keyName].clickDetector?._handleMouseDown e
 
-				listener._handleMouseDown e
-
-			for listener in nodeData[@keyName].dragDetectors
-
-				listener._handleMouseDown e
+			nodeData[@keyName].dragDetector?._handleMouseDown e
 
 		return
 
@@ -66,11 +62,11 @@ module.exports = class ButtonManager
 
 		while lastLength > 0
 
-			listener = @_activeDetectors[i]
+			detector = @_activeDetectors[i]
 
-			return unless listener?
+			return unless detector?
 
-			listener._handleMouseMove e
+			detector._handleMouseMove e
 
 			newLength = @_activeDetectors.length
 
@@ -87,11 +83,11 @@ module.exports = class ButtonManager
 
 		while lastLength > 0
 
-			listener = @_activeDetectors[i]
+			detector = @_activeDetectors[i]
 
-			return unless listener?
+			return unless detector?
 
-			listener._handleMouseUp e
+			detector._handleMouseUp e
 
 			newLength = @_activeDetectors.length
 
@@ -103,16 +99,20 @@ module.exports = class ButtonManager
 
 	onClick: (nodeData, args) ->
 
-		l = new ClickDetector @, nodeData, args
+		detector = nodeData.clickDetector
 
-		nodeData[@keyName].clickDetectors.push l
+		unless detector?
 
-		l
+			detector = nodeData[@keyName].clickDetector = new ClickDetector @, nodeData, args
+
+		detector
 
 	onDrag: (nodeData, args) ->
 
-		l = new DragDetector @, nodeData, args
+		detector = nodeData.dragDetector
 
-		nodeData[@keyName].dragDetectors.push l
+		unless detector?
 
-		l
+			detector = nodeData[@keyName].dragDetector = new DragDetector @, nodeData, args
+
+		detector

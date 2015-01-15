@@ -115,23 +115,23 @@ module.exports = class Moosh
 				id: id
 				node: node
 
-				hoverDetectors: []
-				wheelDetectors: []
+				hoverDetector: null
+				wheelDetector: null
 
 				left:
 
-					clickDetectors: []
-					dragDetectors: []
+					clickDetector: null
+					dragDetector: null
 
 				right:
 
-					clickDetectors: []
-					dragDetectors: []
+					clickDetector: null
+					dragDetector: null
 
 				middle:
 
-					clickDetectors: []
-					dragDetectors: []
+					clickDetector: null
+					dragDetector: null
 
 				callbacksForClickOutside: []
 
@@ -147,18 +147,18 @@ module.exports = class Moosh
 
 			data = @_nodesData[id]
 
-			l.detach() for l in data.hoverDetectors
+			data.hoverDetector?.detach()
 
-			l.detach() for l in data.wheelDetectors
+			data.wheelDetector?.detach()
 
-			l.detach() for l in data.left.clickDetectors
-			l.detach() for l in data.left.dragDetectors
+			data.left.clickDetector?.detach()
+			data.left.dragDetector?.detach()
 
-			l.detach() for l in data.right.clickDetectors
-			l.detach() for l in data.right.dragDetectors
+			data.right.clickDetector?.detach()
+			data.right.dragDetector?.detach()
 
-			l.detach() for l in data.middle.clickDetectors
-			l.detach() for l in data.middle.dragDetectors
+			data.middle.clickDetector?.detach()
+			data.middle.dragDetector?.detach()
 
 			node.removeAttribute "data-moosh-#{@id}-id"
 
@@ -368,7 +368,7 @@ module.exports = class Moosh
 
 		e.preventDefault() if @_scrollingDisabled
 
-	_getNodeDataForDetectors: (node) ->
+	_getNodeData: (node) ->
 
 		node = @_getHtmlNode node
 
@@ -402,7 +402,7 @@ module.exports = class Moosh
 
 	onClickOutside: (node, cb) ->
 
-		nodeData = @_getNodeDataForDetectors node
+		nodeData = @_getNodeData node
 
 		if @_openModals.indexOf(nodeData) is -1
 
@@ -414,7 +414,7 @@ module.exports = class Moosh
 
 	discardClickOutside: (node) ->
 
-		nodeData = @_getNodeDataForDetectors node
+		nodeData = @_getNodeData node
 
 		if @_openModals.indexOf(nodeData) isnt -1
 
@@ -426,55 +426,55 @@ module.exports = class Moosh
 
 	onHover: (node, rest...) ->
 
-		data = @_getNodeDataForDetectors node
+		data = @_getNodeData node
 
 		@_hovers.onHover data, rest
 
 	onWheel: (node, rest...) ->
 
-		data = @_getNodeDataForDetectors node
+		data = @_getNodeData node
 
 		@_wheels.onWheel data, rest
 
 	onLeftClick: (node, rest...) ->
 
-		data = @_getNodeDataForDetectors node
+		data = @_getNodeData node
 
 		@_lefts.onClick data, rest
 
 	onRightClick: (node, rest...) ->
 
-		data = @_getNodeDataForDetectors node
+		data = @_getNodeData node
 
 		@_rights.onClick data, rest
 
 	onMiddleClick: (node, rest...) ->
 
-		data = @_getNodeDataForDetectors node
+		data = @_getNodeData node
 
 		@_middles.onClick data, rest
 
 	onLeftDrag: (node, rest...) ->
 
-		data = @_getNodeDataForDetectors node
+		data = @_getNodeData node
 
 		@_lefts.onDrag data, rest
 
 	onRightDrag: (node, rest...) ->
 
-		data = @_getNodeDataForDetectors node
+		data = @_getNodeData node
 
 		@_rights.onDrag data, rest
 
 	onMiddleDrag: (node, rest...) ->
 
-		data = @_getNodeDataForDetectors node
+		data = @_getNodeData node
 
 		@_middles.onDrag data, rest
 
 	ignore: (node) ->
 
-		data = @_getNodeDataForDetectors node
+		data = @_getNodeData node
 
 		return if data in @_nodesToIgnore
 
@@ -484,7 +484,7 @@ module.exports = class Moosh
 
 	unignore: (node) ->
 
-		data = @_getNodeDataForDetectors node
+		data = @_getNodeData node
 
 		return unless data in @_nodesToIgnore
 
@@ -494,7 +494,7 @@ module.exports = class Moosh
 
 	ignoreAllEventsOriginatingInThisNode: (node) ->
 
-		data = @_getNodeDataForDetectors node
+		data = @_getNodeData node
 
 		return if data in @_listOfNodesToMakeUsIgnoreAllEventsOriginatingInThem
 
@@ -504,7 +504,7 @@ module.exports = class Moosh
 
 	unignoreAllEventsOriginatingInThisNode: (node) ->
 
-		data = @_getNodeDataForDetectors node
+		data = @_getNodeData node
 
 		return unless data in @_listOfNodesToMakeUsIgnoreAllEventsOriginatingInThem
 

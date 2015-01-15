@@ -9,19 +9,18 @@ module.exports = class WheelManager
 
 	onWheel: (nodeData, args) ->
 
-		l = new WheelDetector @, nodeData, args
+		detector = nodeData.wheelDetector
 
-		nodeData.wheelDetectors.push l
+		unless detector?
 
-		l
+			detector = nodeData.wheelDetector = new WheelDetector @, nodeData, args
+
+		detector
 
 	handleMouseWheel: (e, ancestors) ->
 
 		for nodeData in ancestors
 
-			# let's iterate through all of this node's wheel listeners
-			for listener in nodeData.wheelDetectors
-
-				listener._handleMouseWheel e
+			nodeData.wheelDetector?._handleMouseWheel e
 
 		return
