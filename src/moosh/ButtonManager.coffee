@@ -10,6 +10,8 @@ module.exports = class ButtonManager
 
 		@_activeHandlers = []
 
+		@_lastReceivedEventTypeWas = null
+
 	_removeHandlerFromActiveHandlersList: (handler) ->
 
 		array.pluckOneItem @_activeHandlers, handler
@@ -35,7 +37,7 @@ module.exports = class ButtonManager
 
 			if activeHandler isnt handler
 
-				do handler._cancel
+				handler._cancel()
 
 			newLength = @_activeHandlers.length
 
@@ -45,7 +47,38 @@ module.exports = class ButtonManager
 
 		@_activeHandlers = [activeHandler]
 
+	_cancelAllActiveHandlers: ->
+
+		lastLength = @_activeHandlers.length
+		i = 0
+
+		while lastLength > 0
+
+			handler = @_activeHandlers[i]
+
+			return unless handler?
+
+			handler._cancel()
+
+			newLength = @_activeHandlers.length
+
+			i += newLength - lastLength + 1
+
+			lastLength = newLength
+
+		@_activeHandlers = []
+
 	handleMouseDown: (e, ancestors) ->
+
+		if @_lastReceivedEventTypeWas is 'down'
+
+			@_cancelAllActiveHandlers()
+
+			@_lastReceivedEventTypeWas = 'down'
+
+			return
+
+		@_lastReceivedEventTypeWas = 'down'
 
 		for nodeData in ancestors
 
@@ -77,6 +110,16 @@ module.exports = class ButtonManager
 		return
 
 	handleMouseUp: (e, ancestors) ->
+
+		if @_lastReceivedEventTypeWas is 'up'
+
+			@_cancelAllActiveHandlers()
+
+			@_lastReceivedEventTypeWas = 'up'
+
+			return
+
+		@_lastReceivedEventTypeWas = 'up'
 
 		lastLength = @_activeHandlers.length
 		i = 0
