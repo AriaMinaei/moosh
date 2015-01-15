@@ -1,6 +1,6 @@
-GestureDetector = require '../GestureDetector'
+GestureHandler = require '../GestureHandler'
 
-module.exports = class HoverDetector extends GestureDetector
+module.exports = class HoverHandler extends GestureHandler
 
 	constructor: (@_manager, @_nodeData) ->
 
@@ -91,7 +91,7 @@ module.exports = class HoverDetector extends GestureDetector
 
 		@_mouseIsOverNode = yes
 
-		@_manager._addDetectorToActiveDetectorsList @
+		@_manager._addHandlerToActiveHandlersList @
 
 		return
 
@@ -103,7 +103,7 @@ module.exports = class HoverDetector extends GestureDetector
 
 		@_mouseIsOverNode = no
 
-		@_manager._removeDetectorFromActiveDetectorsList @
+		@_manager._removeHandlerFromActiveHandlersList @
 
 		return
 

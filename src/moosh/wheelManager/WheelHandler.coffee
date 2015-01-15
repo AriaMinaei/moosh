@@ -1,6 +1,6 @@
-GestureDetector = require '../GestureDetector'
+GestureHandler = require '../GestureHandler'
 
-module.exports = class WheelDetector extends GestureDetector
+module.exports = class WheelHandler extends GestureHandler
 
 	constructor: (@_manager, @_nodeData) ->
 

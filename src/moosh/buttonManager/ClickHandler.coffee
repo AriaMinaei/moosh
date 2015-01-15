@@ -1,6 +1,6 @@
-GestureDetector = require '../GestureDetector'
+GestureHandler = require '../GestureHandler'
 
-module.exports = class ClickDetector extends GestureDetector
+module.exports = class ClickHandler extends GestureHandler
 
 	constructor: (@_manager, @_nodeData, args) ->
 
@@ -105,7 +105,7 @@ module.exports = class ClickDetector extends GestureDetector
 
 		@_active = no
 
-		@_manager._removeDetectorFromActiveDetectorsList @
+		@_manager._removeHandlerFromActiveHandlersList @
 
 		@_emit 'cancel', @_event
 
@@ -123,7 +123,7 @@ module.exports = class ClickDetector extends GestureDetector
 
 			@_active = yes
 
-			@_manager._addDetectorToActiveDetectorsList @
+			@_manager._addHandlerToActiveHandlersList @
 
 			@_startPageX = e.pageX
 			@_startPageY = e.pageY
@@ -162,7 +162,7 @@ module.exports = class ClickDetector extends GestureDetector
 
 			@_manager._cancelOthers @
 
-			@_manager._removeDetectorFromActiveDetectorsList @
+			@_manager._removeHandlerFromActiveHandlersList @
 
 			@_active = no
 

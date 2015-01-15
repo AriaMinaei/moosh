@@ -1,6 +1,6 @@
-GestureDetector = require '../GestureDetector'
+GestureHandler = require '../GestureHandler'
 
-module.exports = class DragDetector extends GestureDetector
+module.exports = class DragHandler extends GestureHandler
 
 	constructor: (@_manager, @_nodeData) ->
 
@@ -148,7 +148,7 @@ module.exports = class DragDetector extends GestureDetector
 		@_mightBe = yes
 		@_firstTime = yes
 
-		@_manager._addDetectorToActiveDetectorsList @
+		@_manager._addHandlerToActiveHandlersList @
 
 		@_startPageX = e.pageX
 		@_startPageY = e.pageY
@@ -241,6 +241,6 @@ module.exports = class DragDetector extends GestureDetector
 
 		@_emit 'end', @_event
 
-		@_manager._removeDetectorFromActiveDetectorsList @
+		@_manager._removeHandlerFromActiveHandlersList @
 
 		return

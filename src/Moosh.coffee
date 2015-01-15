@@ -115,23 +115,23 @@ module.exports = class Moosh
 				id: id
 				node: node
 
-				hoverDetector: null
-				wheelDetector: null
+				hoverHandler: null
+				wheelHandler: null
 
 				left:
 
-					clickDetector: null
-					dragDetector: null
+					clickHandler: null
+					dragHandler: null
 
 				right:
 
-					clickDetector: null
-					dragDetector: null
+					clickHandler: null
+					dragHandler: null
 
 				middle:
 
-					clickDetector: null
-					dragDetector: null
+					clickHandler: null
+					dragHandler: null
 
 				callbacksForClickOutside: []
 
@@ -147,18 +147,18 @@ module.exports = class Moosh
 
 			data = @_nodesData[id]
 
-			data.hoverDetector?.detach()
+			data.hoverHandler?.detach()
 
-			data.wheelDetector?.detach()
+			data.wheelHandler?.detach()
 
-			data.left.clickDetector?.detach()
-			data.left.dragDetector?.detach()
+			data.left.clickHandler?.detach()
+			data.left.dragHandler?.detach()
 
-			data.right.clickDetector?.detach()
-			data.right.dragDetector?.detach()
+			data.right.clickHandler?.detach()
+			data.right.dragHandler?.detach()
 
-			data.middle.clickDetector?.detach()
-			data.middle.dragDetector?.detach()
+			data.middle.clickHandler?.detach()
+			data.middle.dragHandler?.detach()
 
 			node.removeAttribute "data-moosh-#{@id}-id"
 

@@ -1,5 +1,5 @@
 array = require 'utila/lib/array'
-HoverDetector = require './hoverManager/HoverDetector'
+HoverHandler = require './hoverManager/HoverHandler'
 
 module.exports = class HoverManager
 
@@ -7,46 +7,46 @@ module.exports = class HoverManager
 
 		@_kilidScope = @clickManager._kilidScope
 
-		@_activeDetectors = []
+		@_activeHandlers = []
 
 	onHover: (nodeData, args) ->
 
-		detector = nodeData.hoverDetector
+		handler = nodeData.hoverHandler
 
-		unless detector?
+		unless handler?
 
-			detector = nodeData.hoverDetector = new HoverDetector @, nodeData, args
+			handler = nodeData.hoverHandler = new HoverHandler @, nodeData, args
 
-		detector
+		handler
 
 	handleMouseMove: (e, ancestors) ->
 
-		@_checkMouseLeaveForActiveDetectors e, ancestors
+		@_checkMouseLeaveForActiveHandlers e, ancestors
 
 		for nodeData in ancestors
 
 			# let's iterate through all of this node's hover listeners
-			nodeData.hoverDetector?._handleMouseMove e
+			nodeData.hoverHandler?._handleMouseMove e
 
 		return
 
 	# calls 'leave' on elements outside the pointer
-	_checkMouseLeaveForActiveDetectors: (e, ancestors) ->
+	_checkMouseLeaveForActiveHandlers: (e, ancestors) ->
 
-		for detector in @_activeDetectors.slice 0
+		for handler in @_activeHandlers.slice 0
 
-			detector._checkIfShouldLeave e, ancestors
-
-		return
-
-	_removeDetectorFromActiveDetectorsList: (detector) ->
-
-		array.pluckOneItem @_activeDetectors, detector
+			handler._checkIfShouldLeave e, ancestors
 
 		return
 
-	_addDetectorToActiveDetectorsList: (detector) ->
+	_removeHandlerFromActiveHandlersList: (handler) ->
 
-		@_activeDetectors.push detector
+		array.pluckOneItem @_activeHandlers, handler
+
+		return
+
+	_addHandlerToActiveHandlersList: (handler) ->
+
+		@_activeHandlers.push handler
 
 		return

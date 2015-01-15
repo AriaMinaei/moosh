@@ -1,7 +1,7 @@
 array = require 'utila/lib/array'
 PipingEmitter = require 'utila/lib/PipingEmitter'
 
-module.exports = class GestureDetector extends PipingEmitter
+module.exports = class GestureHandler extends PipingEmitter
 
 	constructor: (manager) ->
 

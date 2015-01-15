@@ -1,5 +1,5 @@
 array = require 'utila/lib/array'
-WheelDetector = require './wheelManager/WheelDetector'
+WheelHandler = require './wheelManager/WheelHandler'
 
 module.exports = class WheelManager
 
@@ -9,18 +9,18 @@ module.exports = class WheelManager
 
 	onWheel: (nodeData, args) ->
 
-		detector = nodeData.wheelDetector
+		handler = nodeData.wheelHandler
 
-		unless detector?
+		unless handler?
 
-			detector = nodeData.wheelDetector = new WheelDetector @, nodeData, args
+			handler = nodeData.wheelHandler = new WheelHandler @, nodeData, args
 
-		detector
+		handler
 
 	handleMouseWheel: (e, ancestors) ->
 
 		for nodeData in ancestors
 
-			nodeData.wheelDetector?._handleMouseWheel e
+			nodeData.wheelHandler?._handleMouseWheel e
 
 		return
