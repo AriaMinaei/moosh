@@ -252,7 +252,11 @@ module.exports = class Moosh
 
 		if e.button is 0
 
-			@_closeModalsIfNecessary e, ancestors
+			if @_closeModalsIfNecessary e, ancestors
+
+				e.preventDefault?()
+
+				return
 
 			@_lefts.handleMouseDown e, ancestors
 
@@ -380,11 +384,13 @@ module.exports = class Moosh
 
 		i = 0
 
+		didCloseSomething = no
+
 		loop
 
 			nodeData = @_openModals[i]
 
-			return unless nodeData?
+			break unless nodeData?
 
 			if ancestors.indexOf(nodeData) is -1
 
@@ -394,11 +400,13 @@ module.exports = class Moosh
 
 				array.pluck @_openModals, i
 
+				didCloseSomething = yes
+
 			else
 
 				i++
 
-		return
+		didCloseSomething
 
 	onClickOutside: (node, cb) ->
 
