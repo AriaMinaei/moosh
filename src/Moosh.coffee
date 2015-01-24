@@ -384,7 +384,7 @@ module.exports = class Moosh
 
 		i = 0
 
-		didCloseSomething = no
+		shouldBlock = no
 
 		loop
 
@@ -392,31 +392,41 @@ module.exports = class Moosh
 
 			break unless nodeData?
 
-			if ancestors.indexOf(nodeData) is -1
+			unless nodeData in ancestors
 
-				cb(e) for cb in nodeData.callbacksForClickOutside
+				for {cb, block} in nodeData.callbacksForClickOutside
+
+					cb(e)
+
+					shouldBlock = yes if block
 
 				nodeData.callbacksForClickOutside.length = 0
 
 				array.pluck @_openModals, i
 
-				didCloseSomething = yes
-
 			else
 
 				i++
 
-		didCloseSomething
+		shouldBlock
 
 	onClickOutside: (node, cb) ->
 
 		nodeData = @_getNodeData node
 
-		if @_openModals.indexOf(nodeData) is -1
+		@_openModals.push nodeData unless nodeData in @_openModals
 
-			@_openModals.push nodeData
+		nodeData.callbacksForClickOutside.push {cb, block: yes}
 
-		nodeData.callbacksForClickOutside.push cb
+		return
+
+	detectClickOutside: (node, cb) ->
+
+		nodeData = @_getNodeData node
+
+		@_openModals.push nodeData unless nodeData in @_openModals
+
+		nodeData.callbacksForClickOutside.push {cb, block: no}
 
 		return
 
