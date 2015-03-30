@@ -1,6 +1,6 @@
 {
   "name": "moosh",
-  "version": "0.1.0-beta.28",
+  "version": "0.1.0",
   "description": "(work in progress)",
   "main": "lib/Moosh.js",
   "scripts": {

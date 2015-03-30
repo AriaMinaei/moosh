@@ -276,9 +276,15 @@ module.exports = class Moosh
 
 		if @_currentTouchId?
 
-			touchEvent.preventDefault()
+			if touchEvent.touches.length > 1
 
-			return
+				touchEvent.preventDefault()
+
+				return
+
+			else
+
+				@_currentTouchId = null
 
 		e = touchEvent.changedTouches[0]
 
