@@ -1,6 +1,6 @@
 {
   "name": "moosh",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "(work in progress)",
   "main": "lib/Moosh.js",
   "scripts": {
@@ -10,16 +10,8 @@
     "utila": "~0.5.0-dev.1"
   },
   "devDependencies": {
-    "coffee-script": "~1.8.0",
-    "coffeeify": "^1.0.0"
+    "coffee-script": "~1.8.0"
   },
-
-  "browserify": {
-    "transform": [
-      "coffeeify"
-    ]
-  },
-  "browser": "src/Moosh.coffee",
 
   "author": "Aria Minaei",
   "license": "MIT",

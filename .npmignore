@@ -1,6 +1,6 @@
 *.bat
 .htaccess
-
+src
 npm-debug.log
 !*.gitkeep
 
