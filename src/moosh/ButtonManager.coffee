@@ -10,6 +10,8 @@ module.exports = class ButtonManager
 
 		@_activeListeners = []
 
+		@_shouldCancelNextContextMenu = no
+
 	_removeListenerFromActiveListenersList: (listener) ->
 
 		array.pluckOneItem @_activeListeners, listener
@@ -116,3 +118,15 @@ module.exports = class ButtonManager
 		nodeData[@keyName].dragListeners.push l
 
 		l
+
+	handleContextMenu: (e) ->
+
+		if @_shouldCancelNextContextMenu
+			e.stopPropagation()
+			e.preventDefault()
+
+		@_shouldCancelNextContextMenu = no
+
+	cancelNextContextMenu: ->
+
+		@_shouldCancelNextContextMenu = yes

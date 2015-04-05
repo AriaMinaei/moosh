@@ -77,6 +77,10 @@ module.exports = class Moosh
 
 			@_touchend e
 
+		body.addEventListener "contextmenu", (e) =>
+
+			@_contextMenu e
+
 	_getHtmlNode: (node) ->
 
 		if node.node? then node = node.node
@@ -221,9 +225,11 @@ module.exports = class Moosh
 
 			ancestors.shift()
 
-		if e.button is 0
+		if e.button in [0, 2]
 
 			@_closeModalsIfNecessary e, ancestors
+
+		if e.button is 0
 
 			@_lefts.handleMouseDown e, ancestors
 
@@ -292,6 +298,10 @@ module.exports = class Moosh
 	_domMouseScroll: (e) ->
 
 		e.preventDefault() if @_scrollingDisabled
+
+	_contextMenu: (e) ->
+
+		@_rights.handleContextMenu e
 
 	_getNodeDataForListeners: (node) ->
 
@@ -396,6 +406,8 @@ module.exports = class Moosh
 		data = @_getNodeDataForListeners node
 
 		@_middles.onDrag data, rest
+
+
 
 	ignore: (node) ->
 

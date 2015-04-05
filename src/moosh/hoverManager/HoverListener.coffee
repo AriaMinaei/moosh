@@ -81,15 +81,27 @@ module.exports = class HoverListener extends _Listener
 
 		return
 
+	_forceLeave: ->
+
+		do @_deactivate
+
+		if @_comboSatisfies
+
+			do @_leave
+
 	_handleMouseMove: (e) ->
 
 		return unless @enabled
 
 		@_lastReceivedMouseEvent = e
 
+		capture = no
+
 		if @_mouseIsOverNode
 
 			if @_comboSatisfies
+
+				capture = yes
 
 				do @_move
 
@@ -99,9 +111,11 @@ module.exports = class HoverListener extends _Listener
 
 			if @_comboSatisfies
 
+				capture = yes
+
 				do @_enter
 
-		return
+		capture
 
 	_activate: ->
 

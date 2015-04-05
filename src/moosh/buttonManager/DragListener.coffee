@@ -216,6 +216,8 @@ module.exports = class DragListener extends _Listener
 
 		if @_firstTime
 
+			return if Math.abs(@_event.absX) < 4 and Math.abs(@_event.absY) < 4
+
 			@_firstTime = no
 
 			@_manager._cancelOthers @

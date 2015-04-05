@@ -135,6 +135,8 @@ module.exports = class ClickListener extends _Listener
 
 			@_manager._addListenerToActiveListenersList @
 
+			@_manager.cancelNextContextMenu() if @_manager.keyName is 'right'
+
 			@_startPageX = e.pageX
 			@_startPageY = e.pageY
 
@@ -167,6 +169,8 @@ module.exports = class ClickListener extends _Listener
 		do @_modifyEvent
 
 		@_event.repeats = e.detail
+
+		# @_manager.cancelNextContextMenu() if @_manager.keyName is 'right'
 
 		if @_upCallback?
 
